@@ -55,6 +55,7 @@ import '/providers/page/message_page/user_image_provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '/models/hives/userid.dart';
 import '/providers/post_all/post_fee_provider.dart';
+import 'pages/home/suggest/pages/suggest_page.dart';
 import 'providers/banner/banner_home_provider.dart';
 import 'providers/network_info.dart';
 import 'providers/page/home_page_provider.dart';
@@ -317,8 +318,10 @@ class _MainPageState extends State<MainPage> {
       case 0:
         return const FreePostAllPage();
       case 1:
-        return isLogin ? MessagePage() : Container();
+        return isLogin ? const SuggestPage() : Container();
       case 2:
+        return isLogin ? MessagePage() : Container();
+      case 3:
         return isLogin ? const CreateFreePost() : Container();
 
       default:
@@ -339,6 +342,7 @@ class _MainPageState extends State<MainPage> {
             _buildScreen(0),
             _buildScreen(1),
             _buildScreen(2),
+            _buildScreen(3),
             // Add other screens if necessary
           ],
         ),
@@ -352,6 +356,10 @@ class _MainPageState extends State<MainPage> {
               label: 'Home',
             ),
             BottomNavigationBarItem(
+              icon: Icon(Icons.done),
+              label: 'Gợi ý',
+            ),
+            BottomNavigationBarItem(
               icon: Icon(Icons.chat),
               label: 'Tin nhắn',
             ),
@@ -362,7 +370,7 @@ class _MainPageState extends State<MainPage> {
           ],
           type: BottomNavigationBarType.fixed,
           backgroundColor: Colors.white,
-          selectedItemColor: Theme.of(context).primaryColor,
+          selectedItemColor: Colors.pink,
           unselectedItemColor: Colors.grey,
           showUnselectedLabels: true,
           showSelectedLabels: true,
