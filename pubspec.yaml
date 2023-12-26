@@ -1,0 +1,128 @@
+name: loventine_flutter
+description: A new Flutter project.
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ">=2.17.5 <3.0.0"
+
+dependencies:
+  cached_network_image: ^3.2.3
+  cloudinary_public: ^0.13.0
+  cupertino_icons: ^1.0.2
+  dio: ^4.0.6
+  dotted_border: ^2.0.0+2
+  file_picker: ^5.2.2
+  firebase_core: ^2.0.0
+  flutter:
+    sdk: flutter
+  flutter_custom_cards: ^0.2.1
+  flutter_rating_bar: ^4.0.1
+  flutter_switch: ^0.3.2
+  font_awesome_flutter: ^10.1.0
+  group_button: ^5.0.1
+  http: ^0.13.5
+  image_picker: ^0.8.5+3
+  intl: ^0.18.1
+  intl_phone_number_input: ^0.7.0+2
+  timeline_tile: ^2.0.0
+  shared_preferences: ^2.0.8
+  json_annotation: ^4.6.0
+  logger: ^1.1.0
+  lottie: ^1.4.2
+  provider: ^6.0.3
+  uuid: ^3.0.5
+  socket_io_client: ^2.0.2
+  flutter_launcher_icons: ^0.13.1
+  flutter_svg: ^2.0.7
+  cloudinary: ^1.1.0
+  get_storage: ^2.0.3
+  timelines: ^0.1.0
+  flutter_webrtc: ^0.9.32
+  peerdart: ^0.5.0
+  just_audio: ^0.9.32
+  audio_session: ^0.1.13
+  flutter_quill: ^7.1.1
+  photo_view: ^0.14.0
+  card_loading: ^0.3.0
+  rive: ^0.9.1
+  flutter_local_notifications: ^14.0.0+1
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  path_provider: ^2.0.15
+  visibility_detector: ^0.4.0+2
+  flutter_linkify: ^6.0.0
+  html: ^0.15.4
+  keyboard_attachable: ^2.1.0
+  dismissible_page: ^1.0.2
+  connectivity_plus: ^4.0.1
+  photo_manager: ^2.7.1
+  flutter_image_compress: ^1.1.0
+  json_serializable: ^6.6.2
+  pinput: ^3.0.0
+  wolt_modal_sheet: ^0.0.4
+  flutter_localizations:
+    sdk: flutter
+  slug_it: ^0.0.1
+  flutter_datetime_picker_plus: ^2.0.0+1
+  windows_notification: ^0.0.3
+  permission_handler: ^10.4.3
+  google_mlkit_text_recognition: ^0.10.0
+  edge_detection: ^1.1.2
+  get: ^4.6.5
+  qr_code_utils: ^0.0.1
+  cloud_firestore: ^4.9.1
+  firebase_messaging: ^14.6.7
+  chips_choice: ^3.0.1
+  material_tag_editor: ^0.1.2
+  like_button: ^2.0.5
+  dropdown_search: ^5.0.6
+  volume_controller: ^2.0.7
+  lecle_volume_flutter: ^0.0.1+1
+  flutter_secure_storage: ^9.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/rives/
+    - assets/lotties/
+    - assets/svgs/
+
+  fonts:
+    - family: Nunito-SemiBoldItalic
+      fonts:
+        - asset: assets/fonts/Loventine-SemiboldItalic.otf
+
+    - family: Loventine-Semibold
+      fonts:
+        - asset: assets/fonts/Loventine-Semibold.otf
+
+    - family: Loventine-Regular
+      fonts:
+        - asset: assets/fonts/Loventine-Regular.otf
+
+    - family: Loventine-Black
+      fonts:
+        - asset: assets/fonts/Loventine-Black.otf
+
+    - family: Loventine-Bold
+      fonts:
+        - asset: assets/fonts/Loventine-Bold.otf
+
+    - family: Loventine-Extrabold
+      fonts:
+        - asset: assets/fonts/Loventine-Black.otf
+
+    - family: Loventine-Light
+      fonts:
+        - asset: assets/fonts/Loventine-Light.otf
+
+    - family: Montserrat-Bold
+      fonts:
+        - asset: assets/fonts/Loventine-Bold.otf
