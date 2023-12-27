@@ -28,6 +28,7 @@ class User {
   String? sex;
   late List<String> fcmTokens;
   String? walletPassword;
+  String? avatarUrl;
   User(
       {required this.password,
       required this.email,
@@ -39,7 +40,8 @@ class User {
       this.phone,
       this.address,
       this.sex,
-      this.walletPassword});
+      this.walletPassword,
+      this.avatarUrl});
 
   User.fromJson(Map json) {
     password = json['password'];
@@ -53,6 +55,7 @@ class User {
     address = json['address'] ?? "";
     sex = json['sex'] ?? "";
     walletPassword = json['walletPassword'] ?? "";
+    avatarUrl = json["avatarUrl"] ?? "";
   }
 }
 
@@ -62,6 +65,7 @@ class CardProfileProvider with ChangeNotifier {
     email: '',
     name: '',
     verified: false,
+    avatarUrl: ''
   );
   User userOther = User(
     password: '',
@@ -96,64 +100,63 @@ class CardProfileProvider with ChangeNotifier {
 
   Future<void> fetchCurrentUser(String current_user_id) async {
     print("💯Đang lấy dữ liệu ở cardprofile");
-    final url = Uri.parse('$baseUrl/auth/getUser/$current_user_id');
-    final Map<String, dynamic> extractedData;
+    print(current_user_id);
+    final url = '$urlUsers/$current_user_id';
+    
     try {
-      final response = await get(url);
-      extractedData = json.decode(response.body) as Map<String, dynamic>;
-      if (extractedData == null) {
-        return;
-      }
+      final response = await Dio().get(url);
+
       //USER
-      user = User.fromJson(extractedData['message']);
-      //REVIEW
-      var reviewsServer = extractedData["message"]["reviews"];
-      _reviews = [];
-      for (int i = 0; i < reviewsServer.length; i++) {
-        _reviews.add(
-            UserReview.toUserReview(reviewsServer[i] as Map<String, dynamic>));
-      }
+      user = User.fromJson(response.data);
+      print(user.name);
+      // //REVIEW
+      // var reviewsServer = extractedData["message"]["reviews"];
+      // _reviews = [];
+      // for (int i = 0; i < reviewsServer.length; i++) {
+      //   _reviews.add(
+      //       UserReview.toUserReview(reviewsServer[i] as Map<String, dynamic>));
+      // }
 
-      //WORK
-      var worksServer = extractedData["message"]["works"];
-      _works = [];
-      for (int i = 0; i < worksServer.length; i++) {
-        _works.add(UserWork.toUserWork(worksServer[i] as Map<String, dynamic>));
-      }
+      // //WORK
+      // var worksServer = extractedData["message"]["works"];
+      // _works = [];
+      // for (int i = 0; i < worksServer.length; i++) {
+      //   _works.add(UserWork.toUserWork(worksServer[i] as Map<String, dynamic>));
+      // }
 
-      //EDUCATION
-      var educationsServer = extractedData["message"]["educations"];
-      _educations = [];
-      for (int i = 0; i < educationsServer.length; i++) {
-        _educations.add(UserEducation.toUserEducation(
-            educationsServer[i] as Map<String, dynamic>));
-      }
+      // //EDUCATION
+      // var educationsServer = extractedData["message"]["educations"];
+      // _educations = [];
+      // for (int i = 0; i < educationsServer.length; i++) {
+      //   _educations.add(UserEducation.toUserEducation(
+      //       educationsServer[i] as Map<String, dynamic>));
+      // }
 
-      //RESUMES
-      var resumesServer = extractedData["message"]["resumes"];
-      _resumes = [];
-      for (var resume in resumesServer) {
-        String title = resume['title'];
-        String _id = resume['_id'];
-        List<dynamic> content = resume['content'];
-        _resumes.add(UserResume(title: title, content: content, id: _id));
-      }
+      // //RESUMES
+      // var resumesServer = extractedData["message"]["resumes"];
+      // _resumes = [];
+      // for (var resume in resumesServer) {
+      //   String title = resume['title'];
+      //   String _id = resume['_id'];
+      //   List<dynamic> content = resume['content'];
+      //   _resumes.add(UserResume(title: title, content: content, id: _id));
+      // }
 
-      //SKILL
-      var skillsServer = extractedData["message"]["skills"];
-      _skills = [];
-      for (int i = 0; i < skillsServer.length; i++) {
-        _skills.add(
-            UserSkill.toUserSkill(skillsServer[i] as Map<String, dynamic>));
-      }
+      // //SKILL
+      // var skillsServer = extractedData["message"]["skills"];
+      // _skills = [];
+      // for (int i = 0; i < skillsServer.length; i++) {
+      //   _skills.add(
+      //       UserSkill.toUserSkill(skillsServer[i] as Map<String, dynamic>));
+      // }
 
-      //LANGUAGE
-      var languagesServer = extractedData["message"]["languages"];
-      _languages = [];
-      for (int i = 0; i < languagesServer.length; i++) {
-        _languages.add(UserLanguage.toUserLanguage(
-            languagesServer[i] as Map<String, dynamic>));
-      }
+      // //LANGUAGE
+      // var languagesServer = extractedData["message"]["languages"];
+      // _languages = [];
+      // for (int i = 0; i < languagesServer.length; i++) {
+      //   _languages.add(UserLanguage.toUserLanguage(
+      //       languagesServer[i] as Map<String, dynamic>));
+      // }
     } catch (error) {
       throw (error);
     }

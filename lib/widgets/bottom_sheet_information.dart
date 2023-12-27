@@ -582,7 +582,7 @@ class _ChooseAvatarState extends State<ChooseAvatar> {
     return pngBytes;
   }
 
-  uploadCloudinary(String path, String name) async {
+  uploadCloudinary(String path, String name, String userId) async {
     String uuid = const Uuid().v4();
     final responseCloudinary = await cloudinary.upload(
         file: path,
@@ -596,13 +596,12 @@ class _ChooseAvatarState extends State<ChooseAvatar> {
 
     if (responseCloudinary.isSuccessful) {
       final response = await Dio().put(
-        "$baseUrl/user/edit_avatar/edit_avatar/${SocketProvider.current_user_id}",
+        "$urlUsers/$userId",
         data: {
-          "avatar": responseCloudinary.secureUrl,
-          "public_id": responseCloudinary.publicId,
+          "avatarUrl": responseCloudinary.secureUrl,
         },
       );
-      if (response.statusCode == 200) {
+      if (response.statusCode == 204) {
         await Provider.of<MessagePageProvider>(context, listen: false)
             .setAvatarUrl(
                 responseCloudinary.secureUrl!, responseCloudinary.publicId!);
@@ -614,25 +613,26 @@ class _ChooseAvatarState extends State<ChooseAvatar> {
     setState(() {
       isLoading = true;
     });
+    String userID = Provider.of<MessagePageProvider>(context, listen: false)
+        .current_user_id;
     if (avatarOpt) {
       await setAvatar();
-      await uploadCloudinary(avatar.path, "avatar.png");
+      await uploadCloudinary(avatar.path, "avatar.png", userID);
     } else {
       XFile pickedFile =
           Provider.of<InformationProvider>(context, listen: false).pickedFile;
-      await uploadCloudinary(pickedFile.path, pickedFile.name);
+      await uploadCloudinary(pickedFile.path, pickedFile.name, userID);
     }
-    String userID = Provider.of<MessagePageProvider>(context, listen: false)
-        .current_user_id;
+
     String birthday =
         Provider.of<InformationProvider>(context, listen: false).birthday;
     String sex = Provider.of<InformationProvider>(context, listen: false).sex;
 
-    final url = '$baseUrl/auth/updateUser/$userID';
+    final url = '$urlUsers/$userID';
     try {
       var response =
           await Dio().put(url, data: {'birthday': birthday, 'sex': sex});
-      if (response.statusCode == 200) {
+      if (response.statusCode == 204) {
         //   CustomSnackbar.show(
         //     context,
         //     title: 'Cập nhật thành công',

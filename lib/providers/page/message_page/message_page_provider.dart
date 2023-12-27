@@ -61,7 +61,7 @@ class MessagePageProvider with ChangeNotifier {
         'avatarUrl',
         UserId(
             avatarUrl: avatarUrl,
-            avatarCloundinaryPublicId: avatarCloundinaryPublicId));
+            avatarCloundinaryPublicId: avatarCloundinaryPublicId));        
     await getAvatarUrl();
     notifyListeners();
   }

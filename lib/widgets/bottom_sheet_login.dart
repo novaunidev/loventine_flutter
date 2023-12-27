@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -11,6 +12,7 @@ import 'package:loventine_flutter/config.dart';
 import 'package:loventine_flutter/modules/auth/app_auth.dart';
 import 'package:loventine_flutter/pages/auth/forget_password_page.dart';
 import 'package:loventine_flutter/providers/app_socket.dart';
+import 'package:loventine_flutter/providers/page/message_page/card_profile_provider.dart';
 import 'package:loventine_flutter/services/firebase_fcm.dart';
 import 'package:loventine_flutter/widgets/button/action_button.dart';
 import 'package:provider/provider.dart';
@@ -254,57 +256,48 @@ class _TextFieldAndLoginInBottomSheetLoginState
       setState(() {
         isLoading = true;
       });
-      Response response = type == "phone"
-          ? await post(
-              Uri.parse(urlLoginwithPhone),
-              body: {'phone': phone.text, 'password': password.text},
-            )
-          : await post(
-              Uri.parse(urlLoginwithEmail),
-              body: {'email': phone.text, 'password': password.text},
-            );
-
+      print("$urlUsers/loginWithEmail");
+      print(phone.text);
+      print(password.text);
+      final response = await Dio().post("$urlUsers/loginWithEmail", data: {
+        "email": phone.text,
+        "password": password.text
+      });
+      print(response.statusCode);
       if (response.statusCode == 200) {
-        final extractedData =
-            json.decode(response.body) as Map<String, dynamic>;
-
-        // save access token / refresh token after login
-        appAuth.saveToken(response);
-
-        // ignore: unnecessary_null_comparison
-        if (extractedData == null) {
-          return;
-        }
-
-        await appSocket.init(extractedData["userid"], context);
+        var userInfo = response.data['user'];   
+        // await appSocket.init(extractedData["userid"], context);
+        print(userInfo['_id']);
         await Provider.of<MessagePageProvider>(context, listen: false)
-            .setCurrentUserId(extractedData["userid"]);
-        String userId =
-            await Provider.of<MessagePageProvider>(context, listen: false)
-                .current_user_id;
-        //==>>>
+            .setCurrentUserId(userInfo['_id']);
+        await Provider.of<CardProfileProvider>(context, listen: false)
+          .fetchCurrentUser(userInfo['_id']);    
+        // String userId =
+        //     await Provider.of<MessagePageProvider>(context, listen: false)
+        //         .current_user_id;
+        // //==>>>
         await Provider.of<MessagePageProvider>(context, listen: false)
             .initialize();
-        await Provider.of<UserImageProvider>(context, listen: false)
-            .getAllUserImage(extractedData["userid"]);
-        String avatarUrl =
-            await Provider.of<UserImageProvider>(context, listen: false).avatar;
-        //FCM
-        List<String> fcmTokens =
-            await Provider.of<UserImageProvider>(context, listen: false)
-                .fcmTokens;
-        if (!Platform.isWindows) {
-          FirebaseFCM().addToken(userId, fcmTokens);
-        }
-        //
-        String avatarCloundinaryPublicId =
-            await Provider.of<UserImageProvider>(context, listen: false)
-                .avatar_cloudinary_public_id;
-        await Provider.of<MessagePageProvider>(context, listen: false)
-            .setAvatarUrl(avatarUrl, avatarCloundinaryPublicId);
-        //==>
-        await Future.delayed(const Duration(seconds: 1));
-        // if (!mounted) return;
+        // await Provider.of<UserImageProvider>(context, listen: false)
+        //     .getAllUserImage(extractedData["userid"]);
+        // String avatarUrl =
+        //     await Provider.of<UserImageProvider>(context, listen: false).avatar;
+        // //FCM
+        // List<String> fcmTokens =
+        //     await Provider.of<UserImageProvider>(context, listen: false)
+        //         .fcmTokens;
+        // if (!Platform.isWindows) {
+        //   FirebaseFCM().addToken(userId, fcmTokens);
+        // }
+        // //
+        // String avatarCloundinaryPublicId =
+        //     await Provider.of<UserImageProvider>(context, listen: false)
+        //         .avatar_cloudinary_public_id;
+        // await Provider.of<MessagePageProvider>(context, listen: false)
+        //     .setAvatarUrl(avatarUrl, avatarCloundinaryPublicId);
+        // //==>
+        // await Future.delayed(const Duration(seconds: 1));
+        // // if (!mounted) return;
 
         Navigator.pushReplacement(
           context,
@@ -455,21 +448,22 @@ class _TextFieldAndLoginInBottomSheetLoginState
           width: padding.width * 0.9,
           isLoading: isLoading,
           onTap: () async {
-            const phonePattern = r'^[0-9]+$';
-            const emailPattern = r'^.+@gmail\.com$';
-            if (RegExp(phonePattern).hasMatch(phone.text)) {
-              handleOnPressLogin("phone");
-              print("phone");
-            } else if (RegExp(emailPattern).hasMatch(phone.text)) {
-              handleOnPressLogin("email");
-              print("email");
-            } else {
-              CustomSnackbar.show(context,
-                  type: SnackbarType.failure,
-                  title: "Vui lòng thử lại",
-                  message: "Sai số điện thoại & email hoặc mật khẩu");
-              isLoading = false;
-            }
+            // const phonePattern = r'^[0-9]+$';
+            // const emailPattern = r'^.+@gmail\.com$';
+            // if (RegExp(phonePattern).hasMatch(phone.text)) {
+            //   handleOnPressLogin("phone");
+            //   print("phone");
+            // } else if (RegExp(emailPattern).hasMatch(phone.text)) {
+            //   handleOnPressLogin("email");
+            //   print("email");
+            // } else {
+            //   CustomSnackbar.show(context,
+            //       type: SnackbarType.failure,
+            //       title: "Vui lòng thử lại",
+            //       message: "Sai số điện thoại & email hoặc mật khẩu");
+            //   isLoading = false;
+            // }
+            handleOnPressLogin('email');
           },
         ),
       ],

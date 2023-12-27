@@ -73,12 +73,17 @@ class _CommentBoxState extends State<CommentBox> {
   Future<void> getAllCommentsOfAPost(String postId) async {
     try {
       var result =
-          await _dio.get("$baseUrl/comment/getAllCommentsOfAPost/$postId");
+          await _dio.get("$urlComments/post/$postId");
       List<dynamic> data = result.data as List<dynamic>;
       commentAll = [];
       for (int i = 0; i < data.length; i++) {
-        commentAll.add(Comment.toComment(data[i] as Map<String, dynamic>));
+        final userCommentId = data[i]["userCommentId"];
+        final response = await Dio().get('$urlUsers/$userCommentId');
+        print(data[i]);
+        print(response.data);
+        commentAll.add(Comment.toComment(data[i] as Map<String, dynamic>, response.data));
       }
+      print(commentAll);
       commentOffline = [];
       // Lấy danh sách bài đăng có chứa "postType" = "fee"
       commentPost = widget.post.isPublic
@@ -448,7 +453,7 @@ class _CommentBoxState extends State<CommentBox> {
                                                         .addComment(
                                                             widget.postId,
                                                             widget.userId,
-                                                            "null",
+                                                            "658bc259dc7db7f924462d4a",
                                                             DateTime.now()
                                                                 .toString(),
                                                             "post",
@@ -486,7 +491,7 @@ class _CommentBoxState extends State<CommentBox> {
                                                             "comment",
                                                             _commentController
                                                                 .text,
-                                                            "null")
+                                                            widget.userPostId)
                                                         .whenComplete(() {
                                                         _commentController
                                                             .clear();
@@ -514,7 +519,7 @@ class _CommentBoxState extends State<CommentBox> {
                                                         time: DateTime.now()
                                                             .toString(),
                                                         replyType: "post",
-                                                        parentCommentId: "null",
+                                                        parentCommentId: "658bc259dc7db7f924462d4a",
                                                         userPostId:
                                                             widget.userPostId,
                                                         childrenComments: []));
@@ -534,7 +539,7 @@ class _CommentBoxState extends State<CommentBox> {
                                                         time: DateTime.now()
                                                             .toString(),
                                                         replyType: "post",
-                                                        parentCommentId: "null",
+                                                        parentCommentId: "658bc259dc7db7f924462d4a",
                                                         userPostId:
                                                             widget.userPostId,
                                                         childrenComments: []));

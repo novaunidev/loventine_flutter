@@ -92,8 +92,8 @@ class CustomPopupMenuButton extends StatelessWidget {
           authorId == userId
               ? postDeleteProvider.moveToTrash(postId).whenComplete(() {
                   if (postType == "free") {
-                    postFreeProvider.getAllFreePostPage1(userId);
-                    postFreeProvider.deleteFreePost(postId);
+                    
+                    postFreeProvider.deleteFreePost(postId, true);
                     bookMarkProvider.updateDeleteInBookmarkPost(postId);
                   } else if (postType == "free1") {
                     postFreeProvider.getAllFreePostPage1(userId);

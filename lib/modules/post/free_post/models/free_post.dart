@@ -2,6 +2,7 @@ import 'dart:convert';
 
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 class FreePost {
+  final String author;
   final String userId;
   final String title;
   final String content;
@@ -19,7 +20,8 @@ class FreePost {
     required this.images,
     this.postType = 'free',
     required this.userAddress,
-    required this.isPublic
+    required this.isPublic,
+    required this.author
   });
 
   Map<String, dynamic> toMap() {
@@ -31,7 +33,8 @@ class FreePost {
       'images': images,
       "postType": postType,
       "userAddress": userAddress,
-      "isPublic": isPublic
+      "isPublic": isPublic,
+      "author": author
 
     };
   }
@@ -44,7 +47,8 @@ class FreePost {
       postingTime: map['postingTime'] as String,
       images: List<String>.from(map['images']),
       userAddress: map["userAddress"] as String,
-      isPublic: map['isPublic'] as bool
+      isPublic: map['isPublic'] as bool,
+      author: map['author'] as String
     );
   }
 

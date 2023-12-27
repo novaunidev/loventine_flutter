@@ -1,4 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:dio/dio.dart';
+
+import '../config.dart';
+
 class PostAll {
   final String id;
   final String userId;
@@ -56,44 +60,63 @@ class PostAll {
       required this.countPaymentVerified});
 
   static PostAll toPostAll(Map<String, dynamic> data) {
-    var adviseType = adviseTypeLabels[data["adviseType"]] ?? "";
-    var adviseTypeValue = 0;
-
-    if (data["adviseType"] == "daily") {
-      adviseTypeValue = data["dailyDuration"] ?? 0;
-    } else if (data["adviseType"] == "hourly") {
-      adviseTypeValue = data["hourlyDuration"] ?? 0;
-    } else if (data["adviseType"] == "monthly") {
-      adviseTypeValue = data["monthlyDuration"] ?? 0;
-    } else if (data["adviseType"] == "yearly") {
-      adviseTypeValue = data["yearlyDuration"] ?? 0;
-    }
     return PostAll(
         id: data["_id"] ?? "",
-        verified: data["author"]["verified"] ?? false,
-        userId: data["author"]["_id"] ?? "",
+        verified: false,
+        userId: data["author"] ?? "",
         postingTime: data["postingTime"] ?? "",
         title: data["title"] ?? "",
-        name: data["author"]["name"] ?? "",
+        name: "",
         content: data["content"] ?? "",
-        price: data["price"].toString(),
-        adviseType: adviseType,
+        price: "",
+        adviseType: "",
         postType: data["postType"] ?? "",
-        avatar: data["author"]["avatarUrl"] ?? "",
-        emoji: data["emoji"].toString(),
+        avatar: "",
+        emoji: "",
         images: List<String>.from(data["images"]),
-        view: data["view"] ?? 0,
+        view: 0,
         applyCount: data["applyCount"] ?? 0,
         likeCounts: data["likeCounts"] ?? 0,
         isLike: data["isLike"] ?? false,
-        adviseTypeValue: adviseTypeValue,
+        adviseTypeValue: 1,
         isDelete: data["isDelete"] ?? false,
         deleteTime: data["deleteTime"] ?? "",
         userAddress: data["userAddress"] ?? "",
-        userAge: data["author"]["birthday"] ?? "",
+        userAge: "",
         isPublic: data["isPublic"] ?? true,
         isBookmark: data["isBookmark"] ?? false,
-        online: data["author"]["online"] ?? false,
+        online: false,
+        countPaymentVerified: data["countPaymentVerified"] ?? 0);
+  }
+
+    static PostAll toPostFree(Map<String, dynamic> data, Map<String, dynamic> data1) {
+      print(data1["name"]);
+    return PostAll(
+        id: data["_id"] ?? "",
+        verified: false,
+        userId: data["author"] ?? "",
+        postingTime: data["postingTime"] ?? "",
+        title: data["title"] ?? "",
+        name: data1["name"] ?? "",
+        content: data["content"] ?? "",
+        price: "",
+        adviseType: "",
+        postType: data["postType"] ?? "",
+        avatar: data1["avatarUrl"] ?? "",
+        emoji: data["emoji"].toString(),
+        images: List<String>.from(data["images"]),
+        view: 0,
+        applyCount: data["applyCount"] ?? 0,
+        likeCounts: data["likeCounts"] ?? 0,
+        isLike: data["isLike"] ?? false,
+        adviseTypeValue: 1,
+        isDelete: data["isDelete"] ?? false,
+        deleteTime: data["deleteTime"] ?? "",
+        userAddress: data["userAddress"] ?? "",
+        userAge: data1["birthday"] ?? "",
+        isPublic: data["isPublic"] ?? true,
+        isBookmark: data["isBookmark"] ?? false,
+        online: false,
         countPaymentVerified: data["countPaymentVerified"] ?? 0);
   }
 
@@ -104,6 +127,8 @@ class PostAll {
     "monthly": "tháng",
     "yearly": "năm"
   };
+
+
 }
 
 //Trong lớp PostAll, trường price có kiểu dữ liệu là String nên cần chuyển đổi từ kiểu dữ liệu số sang chuỗi bằng cách sử dụng phương thức toString().

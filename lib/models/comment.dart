@@ -24,19 +24,20 @@ class Comment {
       required this.userPostId,
       required this.childrenComments});
 
-    static Comment toComment(Map<String, dynamic> data) {
+  static Comment toComment(
+      Map<String, dynamic> data, Map<String, dynamic> data1) {
     return Comment(
       id: data["_id"] ?? "",
       content: data["content"] ?? "",
       postId: data["postId"] ?? "",
-      userCommentId: data["userCommentId"]["_id"] ?? "",
-      nameUserCommentId: data["userCommentId"]["name"] ?? "",
-      avatarUserCommentId: data["userCommentId"]["avatarUrl"] ?? "",
+      userCommentId: data["userCommentId"] ?? "",
+      nameUserCommentId: data1["name"] ?? "",
+      avatarUserCommentId: data1["avatarUrl"] ?? "",
       time: data["time"] ?? "",
       replyType: data["replyType"] ?? "",
       parentCommentId: data["parentCommentId"] ?? "",
       userPostId: data["userPostId"] ?? "",
-      childrenComments: (data["childrenComments"] as List).map((e) => e["_id"].toString()).toList(),
+      childrenComments: List<String>.from(data['childrenComments']),
     );
   }
 }

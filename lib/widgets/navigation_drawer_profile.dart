@@ -253,9 +253,9 @@ class NavigationDrawerProfile extends StatelessWidget {
               List<String> fcmTokens =
                   await Provider.of<UserImageProvider>(context, listen: false)
                       .fcmTokens;
-              if (!Platform.isWindows && !Platform.isIOS) {
-                await FirebaseFCM().removeToken(userId, fcmTokens);
-              }
+              // if (!Platform.isWindows && !Platform.isIOS) {
+              //   await FirebaseFCM().removeToken(userId, fcmTokens);
+              // }
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
             }
             if (data[index]['title'] == "Đăng xuất") {

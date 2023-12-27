@@ -76,7 +76,7 @@ class _FreePostAllPageState extends State<FreePostAllPage> {
   String avatar_cloundinary_public_id = "";
   bool isLogin = false;
   ValueNotifier<bool> isLoadNotifier = ValueNotifier(false);
-  String avatarUrl = "";
+  String avatarUrl = "https://res.cloudinary.com/dc8kxjddi/image/upload/v1676186304/avatar_man_oicegg.gif";
   late String current_user_id = '';
   getOnboarding() async {
     final box = Hive.box<CountApp>('countBox');
@@ -149,22 +149,27 @@ class _FreePostAllPageState extends State<FreePostAllPage> {
               .current_user_id;
       await Provider.of<CardProfileProvider>(context, listen: false)
           .fetchCurrentUser(current_user_id);
-      await Provider.of<UserImageProvider>(context, listen: false)
-          .getAllUserImage(current_user_id);
-      avatarUrl = Provider.of<UserImageProvider>(context, listen: false).avatar;
+      Provider.of<LikeProvider>(context, listen: false).getAllLike();
+      Provider.of<BookmarkProvider>(context, listen: false).getAllIdBookmark(current_user_id);    
+      // await Provider.of<UserImageProvider>(context, listen: false)
+      //     .getAllUserImage(current_user_id);
+      avatarUrl = Provider.of<CardProfileProvider>(context, listen: false).user.avatarUrl ?? "";
       avatar_cloundinary_public_id =
           Provider.of<UserImageProvider>(context, listen: false)
               .avatar_cloudinary_public_id;
       await Provider.of<MessagePageProvider>(context, listen: false)
           .setAvatarUrl(avatarUrl, avatar_cloundinary_public_id);
-      Provider.of<NotificationProvider>(context, listen: false).init();
+      // Provider.of<NotificationProvider>(context, listen: false).init();
+      setState(() {
+        
+      });
     });
 
     controllerPagination.addListener(() {
       // Kiểm tra nếu người dùng kéo xuống cuối trang
       if (controllerPagination.position.pixels ==
           controllerPagination.position.maxScrollExtent) {
-        fetch();
+        // fetch();
       }
       final direction = controllerPagination.position.userScrollDirection;
       if (direction == ScrollDirection.reverse) {
@@ -220,6 +225,7 @@ class _FreePostAllPageState extends State<FreePostAllPage> {
       if (isLogin) {
         final result = await Connectivity().checkConnectivity();
         if (result != ConnectivityResult.none) {
+          print(post.isLike);
           if (post.isLike == false) {
             likeProvider.addLike(post.id, current_user_id);
             postFreeProvider.updateLikeInFreePost(post.id, true);
@@ -496,7 +502,9 @@ class _FreePostAllPageState extends State<FreePostAllPage> {
                         childCount: postAllData.postFree.length,
                         (context, index) {
                       PostAll post = postAllData.postFree[index];
-                      return GestureDetector(
+                      return post.isDelete == true
+                      ?SizedBox()
+                      :GestureDetector(
                           onDoubleTapDown: (details) {
                             setState(() {
                               _tapPosition = details.localPosition;
@@ -615,11 +623,13 @@ class _FreePostItemState extends State<FreePostItem> {
   Future<void> getAllCommentsOfAPost(String postId) async {
     try {
       var result =
-          await _dio.get("$baseUrl/comment/getAllCommentsOfAPost/$postId");
+          await _dio.get("$urlComments/post/$postId");
       List<dynamic> data = result.data as List<dynamic>;
       commentAll = [];
       for (int i = 0; i < data.length; i++) {
-        commentAll.add(Comment.toComment(data[i] as Map<String, dynamic>));
+        final userCommentId = data[i]["userCommentId"];
+        final response = await Dio().get('$urlUsers/$userCommentId');
+        commentAll.add(Comment.toComment(data[i] as Map<String, dynamic>, response.data));
       }
       userComment = [];
       Set<String> _userComment = Set<String>.from(
@@ -645,6 +655,7 @@ class _FreePostItemState extends State<FreePostItem> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     initializeComments();
   }
 
