@@ -134,12 +134,14 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
   Future<void> getAllCommentsOfAPost(String postId) async {
     try {
       var result =
-          await _dio.get("$baseUrl/comment/getAllCommentsOfAPost/$postId");
+          await _dio.get("$urlComments/post/$postId");
 
       List<dynamic> data = result.data as List<dynamic>;
       commentAll = [];
       for (int i = 0; i < data.length; i++) {
-        commentAll.add(Comment.toComment(data[i] as Map<String, dynamic>));
+        final userCommentId = data[i]["userCommentId"];
+        final response = await Dio().get('$urlUsers/$userCommentId');
+        commentAll.add(Comment.toComment(data[i] as Map<String, dynamic>, response.data));
       }
 
       // Lấy danh sách bài đăng có chứa "postType" = "fee"
@@ -336,7 +338,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                                       .addComment(
                                                           widget.post.id,
                                                           widget.userId,
-                                                          "null",
+                                                          "658bc259dc7db7f924462d4a",
                                                           DateTime.now()
                                                               .toString(),
                                                           "post",

@@ -42,14 +42,16 @@ class CommentProvider {
       String content,
       String userPostId) async {
     try {
-      var result = await _dio.post(
-          "$baseUrl/comment/addComment/$postId/$userCommentId/$parentCommentId",
-          data: {
-            "time": time,
-            "content": content,
-            "replyType": replyType,
-            "userPostId": userPostId
-          });
+      var result = await _dio.post(urlComments, data: {
+        "time": time,
+        "content": content,
+        "replyType": replyType,
+        "userPostId": userPostId,
+        "parentCommentId": parentCommentId,
+        "userCommentId": userCommentId,
+        "postId": postId,
+        "childrenComments": []
+      });
       if (result.statusCode == 200) {
         print("addComment success");
       }

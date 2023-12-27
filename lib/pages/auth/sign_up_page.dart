@@ -1,16 +1,23 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:http/http.dart';
+import 'package:loventine_flutter/main.dart';
 import 'package:loventine_flutter/modules/profile/widgets/check_text.dart';
+import 'package:loventine_flutter/providers/information_provider.dart';
+import 'package:loventine_flutter/providers/page/message_page/message_page_provider.dart';
 import 'package:loventine_flutter/values/app_color.dart';
 import 'package:loventine_flutter/widgets/button/action_button.dart';
 import 'package:loventine_flutter/widgets/custom_snackbar.dart';
 import 'package:loventine_flutter/widgets/password_field/src/fancy_password_field.dart';
 import 'package:loventine_flutter/widgets/password_field/src/validation_rule.dart';
+import 'package:provider/provider.dart';
 
 import '../../widgets/step_progress_indicator/src/step_progress_indicator.dart';
 
@@ -39,54 +46,157 @@ class _SignUpState extends State<SignUp> {
   bool isPasswordVisibleOld = true;
   @override
   Widget build(BuildContext context) {
-    checkPhone(String value) async {
+    Future<void> handleOnPressSignUp() async {
       try {
-        var response = await Dio().get("$baseUrl/auth/checkPhone/$value");
-        if (response.statusCode == 200) {
-          String message = response.data["message"];
-          if (message == "Phone already exists") {
-            if (mounted) {
-              setState(() {
-                isExistPhone = true;
-              });
-            }
-          } else {
-            if (mounted) {
-              setState(() {
-                isExistPhone = false;
-              });
-            }
-          }
-        }
+        final response = await Dio().post(urlUsers, data: {
+          'email': email.text,
+          'password': password.text,
+          'passwordConfirm': passwordConfirm.text,
+          'name': name.text,
+          'avatarUrl': "https://www.pmc-kollum.nl/wp-content/uploads/2017/05/no_avatar.jpg"
+        });
+        Provider.of<InformationProvider>(context, listen: false).setIsSignUpTrue();
+        // final extractedData = json.decode(response.body) as Map<String, dynamic>;
+        // if (extractedData == null) {
+        //   return;
+        // }
+        // print(response.statusCode);
+
+        // if (response.statusCode == 200 || response.statusCode == 201) {
+        //   await Future.delayed(const Duration(seconds: 1));
+        //   if (!mounted) return;
+        //   // Navigator.push(
+        //   //   context,
+        //   //   MaterialPageRoute(
+        //   //     builder: (context) => const Login(),
+        //   //   ),
+        //   // );
+
+        //   // appAuth.saveToken(response);
+        // } else {
+        //   print("Failed");
+        // }
       } catch (e) {
         print(e);
       }
     }
 
-    checkEmail(String value) async {
-      String email = value;
+    Future<void> handleOnPressLogin(String type) async {
+      print("login");
       try {
-        var response = await Dio().get("$baseUrl/auth/checkEmail/$email");
+        final response = await Dio().post("$urlUsers/loginWithEmail",
+            data: {"email": email.text, "password": password.text});
         if (response.statusCode == 200) {
-          String message = response.data["message"];
-          if (message == "Email already exists") {
-            if (mounted) {
-              setState(() {
-                isExistEmail = true;
-              });
-            }
-          } else {
-            if (mounted) {
-              setState(() {
-                isExistEmail = false;
-              });
-            }
-          }
+          var userInfo = response.data['user'];
+          // await appSocket.init(extractedData["userid"], context);
+          print(userInfo['_id']);
+          await Provider.of<MessagePageProvider>(context, listen: false)
+              .setCurrentUserId(userInfo['_id']);
+          // String userId =
+          //     await Provider.of<MessagePageProvider>(context, listen: false)
+          //         .current_user_id;
+          // //==>>>
+          await Provider.of<MessagePageProvider>(context, listen: false)
+              .initialize();
+          // await Provider.of<UserImageProvider>(context, listen: false)
+          //     .getAllUserImage(extractedData["userid"]);
+          // String avatarUrl =
+          //     await Provider.of<UserImageProvider>(context, listen: false).avatar;
+          // //FCM
+          // List<String> fcmTokens =
+          //     await Provider.of<UserImageProvider>(context, listen: false)
+          //         .fcmTokens;
+          // if (!Platform.isWindows) {
+          //   FirebaseFCM().addToken(userId, fcmTokens);
+          // }
+          // //
+          // String avatarCloundinaryPublicId =
+          //     await Provider.of<UserImageProvider>(context, listen: false)
+          //         .avatar_cloudinary_public_id;
+          // await Provider.of<MessagePageProvider>(context, listen: false)
+          //     .setAvatarUrl(avatarUrl, avatarCloundinaryPublicId);
+          // //==>
+          // await Future.delayed(const Duration(seconds: 1));
+          // // if (!mounted) return;
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const MainPage(
+                currentIndex: 0,
+              ),
+            ),
+          );
+        } else {
+          CustomSnackbar.show(context,
+              type: SnackbarType.failure,
+              title: "Vui lòng thử lại",
+              message: "Sai số điện thoại & email hoặc mật khẩu");
+          setState(() {
+            isLoading = false;
+          });
         }
       } catch (e) {
         print(e);
+        CustomSnackbar.show(
+          context,
+          type: SnackbarType.failure,
+          title: "Vui lòng thử lại",
+        );
+        setState(() {
+          isLoading = false;
+        });
       }
     }
+
+    // checkPhone(String value) async {
+    //   try {
+    //     var response = await Dio().get("$baseUrl/auth/checkPhone/$value");
+    //     if (response.statusCode == 200) {
+    //       String message = response.data["message"];
+    //       if (message == "Phone already exists") {
+    //         if (mounted) {
+    //           setState(() {
+    //             isExistPhone = true;
+    //           });
+    //         }
+    //       } else {
+    //         if (mounted) {
+    //           setState(() {
+    //             isExistPhone = false;
+    //           });
+    //         }
+    //       }
+    //     }
+    //   } catch (e) {
+    //     print(e);
+    //   }
+    // }
+
+    // checkEmail(String value) async {
+    //   String email = value;
+    //   try {
+    //     var response = await Dio().get("$baseUrl/auth/checkEmail/$email");
+    //     if (response.statusCode == 200) {
+    //       String message = response.data["message"];
+    //       if (message == "Email already exists") {
+    //         if (mounted) {
+    //           setState(() {
+    //             isExistEmail = true;
+    //           });
+    //         }
+    //       } else {
+    //         if (mounted) {
+    //           setState(() {
+    //             isExistEmail = false;
+    //           });
+    //         }
+    //       }
+    //     }
+    //   } catch (e) {
+    //     print(e);
+    //   }
+    // }
 
     final size = MediaQuery.sizeOf(context);
     //Thêm scaffoldKey để không gặp lỗi Floating SnackBar presented off screen
@@ -416,151 +526,154 @@ class _SignUpState extends State<SignUp> {
                             setState(() {
                               isLoading = true;
                             });
-                            await checkEmail(email.text);
+                            handleOnPressSignUp().whenComplete(
+                                () => handleOnPressLogin("email"));
+
+                            // await checkEmail(email.text);
                             //===> await checkPhone(phone.text);
-                            if (email.text.isNotEmpty) {
-                              if (isExistEmail && isExistPhone) {
-                                CustomSnackbar.show(context,
-                                    type: SnackbarType.warning,
-                                    title: "Email và Số điện thoại đã tồn tại!",
-                                    message:
-                                        "Vui lòng điền email và số điện thoại khác");
-                                setState(() {
-                                  isLoading = false;
-                                });
-                              } else if (isExistEmail) {
-                                CustomSnackbar.show(context,
-                                    type: SnackbarType.warning,
-                                    title: "Email đã tồn tại!",
-                                    message: "Vui lòng điền email khác");
-                                setState(() {
-                                  isLoading = false;
-                                });
-                              } else if (isExistPhone) {
-                                CustomSnackbar.show(context,
-                                    type: SnackbarType.warning,
-                                    title: "Số điện thoại đã tồn tại!",
-                                    message:
-                                        "Vui lòng điền số điện thoại khác");
-                                setState(() {
-                                  isLoading = false;
-                                });
-                              } else {
-                                OTPService()
-                                    .sendOTPbyEmail(context, email.text)
-                                    .then((value) {
-                                  value == 200
-                                      ? Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => VerifyPage(
-                                                    phoneNumber: phone.text,
-                                                    name: name.text,
-                                                    email: email.text,
-                                                    password: password.text,
-                                                    passwordConfirm:
-                                                        password.text,
-                                                    type: "signup",
-                                                  )),
-                                        )
-                                      : value == 429
-                                          ? {
-                                              CustomSnackbar.show(context,
-                                                  type: SnackbarType.warning,
-                                                  title: "Cảnh báo",
-                                                  message:
-                                                      "Bạn đã gửi quá 5 Otp. Vui lòng quay lại sau một giờ"),
-                                              setState(() {
-                                                isLoading = false;
-                                              })
-                                            }
-                                          : {
-                                              CustomSnackbar.show(context,
-                                                  type: SnackbarType.failure,
-                                                  title: "Lỗi",
-                                                  message:
-                                                      "Lỗi gửi Otp. Vui lòng thử lại sau"),
-                                              setState(() {
-                                                isLoading = false;
-                                              })
-                                            };
-                                });
-                              }
-                            } else {
-                              if (isExistEmail && isExistPhone) {
-                                CustomSnackbar.show(context,
-                                    type: SnackbarType.warning,
-                                    title: "Email và Số điện thoại đã tồn tại!",
-                                    message:
-                                        "Vui lòng điền email và số điện thoại khác");
-                                setState(() {
-                                  isLoading = false;
-                                  isExistEmail = false;
-                                  isExistPhone = false;
-                                });
-                              } else if (isExistEmail) {
-                                CustomSnackbar.show(context,
-                                    type: SnackbarType.warning,
-                                    title: "Email đã tồn tại!",
-                                    message: "Vui lòng điền email khác");
-                                setState(() {
-                                  isLoading = false;
-                                  isExistEmail = false;
-                                  isExistPhone = false;
-                                });
-                              } else if (isExistPhone) {
-                                CustomSnackbar.show(context,
-                                    type: SnackbarType.warning,
-                                    title: "Số điện thoại đã tồn tại!",
-                                    message:
-                                        "Vui lòng điền số điện thoại khác");
-                                setState(() {
-                                  isLoading = false;
-                                  isExistEmail = false;
-                                  isExistPhone = false;
-                                });
-                              } else {
-                                OTPService()
-                                    .sendOTPbyPhone(context, phone.text)
-                                    .then((value) {
-                                  value == 200
-                                      ? Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => VerifyPage(
-                                                    phoneNumber: phone.text,
-                                                    name: name.text,
-                                                    email: email.text,
-                                                    password: password.text,
-                                                    passwordConfirm:
-                                                        password.text,
-                                                    type: "signup",
-                                                  )),
-                                        )
-                                      : value == 429
-                                          ? {
-                                              CustomSnackbar.show(context,
-                                                  type: SnackbarType.warning,
-                                                  title: "Cảnh báo",
-                                                  message:
-                                                      "Bạn đã gửi quá 5 Otp. Vui lòng quay lại sau một giờ"),
-                                              setState(() {
-                                                isLoading = false;
-                                              }),
-                                            }
-                                          : {
-                                              CustomSnackbar.show(context,
-                                                  type: SnackbarType.failure,
-                                                  title: "Lỗi",
-                                                  message:
-                                                      "Lỗi gửi Otp. Vui lòng thử lại sau"),
-                                              setState(() {
-                                                isLoading = false;
-                                              }),
-                                            };
-                                });
-                              }
-                            }
+                            // if (email.text.isNotEmpty) {
+                            //   if (isExistEmail && isExistPhone) {
+                            //     CustomSnackbar.show(context,
+                            //         type: SnackbarType.warning,
+                            //         title: "Email và Số điện thoại đã tồn tại!",
+                            //         message:
+                            //             "Vui lòng điền email và số điện thoại khác");
+                            //     setState(() {
+                            //       isLoading = false;
+                            //     });
+                            //   } else if (isExistEmail) {
+                            //     CustomSnackbar.show(context,
+                            //         type: SnackbarType.warning,
+                            //         title: "Email đã tồn tại!",
+                            //         message: "Vui lòng điền email khác");
+                            //     setState(() {
+                            //       isLoading = false;
+                            //     });
+                            //   } else if (isExistPhone) {
+                            //     CustomSnackbar.show(context,
+                            //         type: SnackbarType.warning,
+                            //         title: "Số điện thoại đã tồn tại!",
+                            //         message:
+                            //             "Vui lòng điền số điện thoại khác");
+                            //     setState(() {
+                            //       isLoading = false;
+                            //     });
+                            //   } else {
+                            //     OTPService()
+                            //         .sendOTPbyEmail(context, email.text)
+                            //         .then((value) {
+                            //       value == 200
+                            //           ? Navigator.push(
+                            //               context,
+                            //               MaterialPageRoute(
+                            //                   builder: (context) => VerifyPage(
+                            //                         phoneNumber: phone.text,
+                            //                         name: name.text,
+                            //                         email: email.text,
+                            //                         password: password.text,
+                            //                         passwordConfirm:
+                            //                             password.text,
+                            //                         type: "signup",
+                            //                       )),
+                            //             )
+                            //           : value == 429
+                            //               ? {
+                            //                   CustomSnackbar.show(context,
+                            //                       type: SnackbarType.warning,
+                            //                       title: "Cảnh báo",
+                            //                       message:
+                            //                           "Bạn đã gửi quá 5 Otp. Vui lòng quay lại sau một giờ"),
+                            //                   setState(() {
+                            //                     isLoading = false;
+                            //                   })
+                            //                 }
+                            //               : {
+                            //                   CustomSnackbar.show(context,
+                            //                       type: SnackbarType.failure,
+                            //                       title: "Lỗi",
+                            //                       message:
+                            //                           "Lỗi gửi Otp. Vui lòng thử lại sau"),
+                            //                   setState(() {
+                            //                     isLoading = false;
+                            //                   })
+                            //                 };
+                            //     });
+                            //   }
+                            // } else {
+                            //   if (isExistEmail && isExistPhone) {
+                            //     CustomSnackbar.show(context,
+                            //         type: SnackbarType.warning,
+                            //         title: "Email và Số điện thoại đã tồn tại!",
+                            //         message:
+                            //             "Vui lòng điền email và số điện thoại khác");
+                            //     setState(() {
+                            //       isLoading = false;
+                            //       isExistEmail = false;
+                            //       isExistPhone = false;
+                            //     });
+                            //   } else if (isExistEmail) {
+                            //     CustomSnackbar.show(context,
+                            //         type: SnackbarType.warning,
+                            //         title: "Email đã tồn tại!",
+                            //         message: "Vui lòng điền email khác");
+                            //     setState(() {
+                            //       isLoading = false;
+                            //       isExistEmail = false;
+                            //       isExistPhone = false;
+                            //     });
+                            //   } else if (isExistPhone) {
+                            //     CustomSnackbar.show(context,
+                            //         type: SnackbarType.warning,
+                            //         title: "Số điện thoại đã tồn tại!",
+                            //         message:
+                            //             "Vui lòng điền số điện thoại khác");
+                            //     setState(() {
+                            //       isLoading = false;
+                            //       isExistEmail = false;
+                            //       isExistPhone = false;
+                            //     });
+                            //   } else {
+                            //     OTPService()
+                            //         .sendOTPbyPhone(context, phone.text)
+                            //         .then((value) {
+                            //       value == 200
+                            //           ? Navigator.push(
+                            //               context,
+                            //               MaterialPageRoute(
+                            //                   builder: (context) => VerifyPage(
+                            //                         phoneNumber: phone.text,
+                            //                         name: name.text,
+                            //                         email: email.text,
+                            //                         password: password.text,
+                            //                         passwordConfirm:
+                            //                             password.text,
+                            //                         type: "signup",
+                            //                       )),
+                            //             )
+                            //           : value == 429
+                            //               ? {
+                            //                   CustomSnackbar.show(context,
+                            //                       type: SnackbarType.warning,
+                            //                       title: "Cảnh báo",
+                            //                       message:
+                            //                           "Bạn đã gửi quá 5 Otp. Vui lòng quay lại sau một giờ"),
+                            //                   setState(() {
+                            //                     isLoading = false;
+                            //                   }),
+                            //                 }
+                            //               : {
+                            //                   CustomSnackbar.show(context,
+                            //                       type: SnackbarType.failure,
+                            //                       title: "Lỗi",
+                            //                       message:
+                            //                           "Lỗi gửi Otp. Vui lòng thử lại sau"),
+                            //                   setState(() {
+                            //                     isLoading = false;
+                            //                   }),
+                            //                 };
+                            //     });
+                            //   }
+                            // }
                           }
                         },
                       ),

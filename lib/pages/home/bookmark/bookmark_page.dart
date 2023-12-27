@@ -8,6 +8,7 @@ import 'package:loventine_flutter/modules/post/post_detail_screen.dart';
 import 'package:loventine_flutter/providers/page/message_page/user_image_provider.dart';
 import 'package:loventine_flutter/providers/post_all/bookmark_provider.dart';
 import 'package:loventine_flutter/providers/post_all/post_fee_provider.dart';
+import 'package:loventine_flutter/providers/post_all/post_free_provider.dart';
 import 'package:loventine_flutter/values/app_color.dart';
 import 'package:loventine_flutter/widgets/custom_page_route/custom_page_route.dart';
 import 'package:loventine_flutter/widgets/custom_popup_menu_button.dart';
@@ -38,8 +39,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
       current_user_id =
           await Provider.of<MessagePageProvider>(context, listen: false)
               .current_user_id;
-      await Provider.of<BookmarkProvider>(context, listen: false)
-          .getAllBookmarkOfUser(current_user_id);
+      
       setState(() {
         isLoading = false;
       });
@@ -102,23 +102,9 @@ class _BookmarkPageState extends State<BookmarkPage> {
                   ],
                 ),
               ))
-            : Consumer<BookmarkProvider>(
-                builder: (context, bookmarkData, child) => bookmarkData
-                        .bookmarks.isEmpty
-                    ? const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            "Bạn chưa lưu bài viết nào",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 19,
-                                fontFamily: "Loventine-Bold",
-                                fontWeight: FontWeight.w800),
-                          ),
-                        ),
-                      )
-                    : SingleChildScrollView(
+            : Consumer<PostFreeProvider>(
+                builder: (context, bookmarkData, child) => 
+                 SingleChildScrollView(
                         physics: const BouncingScrollPhysics(),
                         child: Padding(
                           padding: const EdgeInsets.only(
@@ -141,16 +127,18 @@ class _BookmarkPageState extends State<BookmarkPage> {
                                   slivers: [
                                     SliverList(
                                         delegate: SliverChildBuilderDelegate(
-                                      childCount: bookmarkData.bookmarks.length,
+                                      childCount: bookmarkData.postFree.length,
                                       (context, index) {
                                         final post =
-                                            bookmarkData.bookmarks[index];
+                                            bookmarkData.postFree[index];
                                         String adviseTypeValue =
                                             post.adviseTypeValue.toString() ==
                                                     "0"
                                                 ? ""
                                                 : "${post.adviseTypeValue}";
-                                        return InkWell(
+                                        return post.isBookmark == false
+                                        ?SizedBox()
+                                        :InkWell(
                                           onTap: () => post.isDelete
                                               ? CustomSnackbar.show(context,
                                                   title: "Bài viết đã bị xóa!",
@@ -362,8 +350,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
                                                   postType: "bookmark",
                                                   isPublic: post.isPublic,
                                                   isBookmark: post.isBookmark,
-                                                  bookmarkId: bookmarkData
-                                                      .idBookmarks[index].id,
+                                                  bookmarkId: "",
                                                   isDetail: false,
                                                   update: (p0, p1) {},
                                                 )

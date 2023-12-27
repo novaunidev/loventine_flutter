@@ -21,20 +21,20 @@ class BookmarkProvider extends ChangeNotifier {
   List<IdBookmark> get idBookmarks => _idBookmarks;
 
   Future<void> getAllBookmarkOfUser(String userId) async {
-    var response = await _dio.get("$baseUrl/bookmark/getBookmarkOfUer/$userId");
-    if (response.statusCode == 200) {
-      final data = response.data as List<dynamic>;
-      _bookmarks = [];
-      _idBookmarks = [];
-      _bookmarks = data
-          .map((bookmarkData) => PostAll.toPostAll(bookmarkData['postId']))
-          .toList();
-      _bookmarks = _bookmarks.reversed.toList();
-      _idBookmarks = data
-          .map((idBookmarkData) => IdBookmark.toIdBookmark(idBookmarkData))
-          .toList();
-      _idBookmarks = _idBookmarks.reversed.toList();
-    }
+    // var response = await _dio.get("$baseUrl/bookmark/getBookmarkOfUer/$userId");
+    // if (response.statusCode == 200) {
+    //   final data = response.data as List<dynamic>;
+    //   _bookmarks = [];
+    //   _idBookmarks = [];
+    //   _bookmarks = data
+    //       .map((bookmarkData) => PostAll.toPostAll(bookmarkData['postId']))
+    //       .toList();
+    //   _bookmarks = _bookmarks.reversed.toList();
+    //   _idBookmarks = data
+    //       .map((idBookmarkData) => IdBookmark.toIdBookmark(idBookmarkData))
+    //       .toList();
+    //   _idBookmarks = _idBookmarks.reversed.toList();
+    // }
   }
 
   Future<void> addBookmark(
@@ -47,9 +47,9 @@ class BookmarkProvider extends ChangeNotifier {
       PostFeeOfUserProvider postFeeUserProvider) async {
     try {
       var response = await _dio
-          .post("$baseUrl/bookmark/addBookmark/$userId/$postId", data: {});
+          .post(urlBookmarks, data: {'postId': postId, 'userId': userId});
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         // ignore: use_build_context_synchronously
         postFeeProvider.updateBookmarkInFeePost(postId, true);
         postFeeUserProvider.updateBookmarkInFeePostofUser(postId, true);
@@ -64,9 +64,20 @@ class BookmarkProvider extends ChangeNotifier {
           type: SnackbarType.success,
         );
       }
+      await getAllIdBookmark(userId);
     } catch (e) {
       print('Failed to add bookmark: $e');
     }
+  }
+
+  Future<void> getAllIdBookmark(String userId) async {
+    final res = await _dio.get('$urlBookmarks/user/$userId');
+    final data = res.data as List<dynamic>;
+    _idBookmarks = [];
+    _idBookmarks = data
+        .map((idBookmarkData) => IdBookmark.toIdBookmark(idBookmarkData))
+        .toList();
+    notifyListeners();    
   }
 
   Future<bool> deleteBookmark(
@@ -80,26 +91,29 @@ class BookmarkProvider extends ChangeNotifier {
       PostFreeOfUserProvider postFreeUserProvider,
       PostFeeOfUserProvider postFeeUserProvider) async {
     try {
-      print("$baseUrl/bookmark/deleteBookmark/$bookmarkId");
+      int index = _idBookmarks.indexWhere(
+          (bookmark) => bookmark.postId == postId);
       var response = await _dio.delete(
-          "$baseUrl/bookmark/deleteBookmark/$bookmarkId/$userId",
+          "$urlBookmarks/${_idBookmarks[index].id}",
           data: {});
-      if (response.statusCode == 200) {
+          print(response.statusCode);
+      if (response.statusCode == 204) {
         // ignore: use_build_context_synchronously
-        _bookmarks.removeAt(index);
-        postFeeProvider.updateBookmarkInFeePost(postId, false);
-        postFeeUserProvider.updateBookmarkInFeePostofUser(postId, false);
+        
+        // postFeeProvider.updateBookmarkInFeePost(postId, false);
+        // postFeeUserProvider.updateBookmarkInFeePostofUser(postId, false);
         postFreeProvider.updateBookmarkInFreePost(postId, false);
-        postFreeProvider.updateBookmarkInFreePost1(postId, false);
+        // postFreeProvider.updateBookmarkInFreePost1(postId, false);
         postFreeUserProvider.updateBookmarkInFreePostofUser(postId, false);
         updateBookmarkInBookmarkPost(postId, false);
+        
         CustomSnackbar.show(
           context,
           title: 'Thông báo',
           message: 'Bạn đã xóa thành công',
           type: SnackbarType.success,
         );
-
+        await getAllIdBookmark(userId);
         return true;
       }
     } catch (e) {}

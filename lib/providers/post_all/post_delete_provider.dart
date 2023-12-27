@@ -35,7 +35,7 @@ class PostDeleteProvider with ChangeNotifier {
 
   Future<void> moveToTrash(String postId) async {
     try {
-      await _dio.patch("$baseUrl/post/updatePost/$postId",
+      await _dio.put("$urlPosts/$postId",
           data: {'isDelete': true, 'deleteTime': DateTime.now().toString()});
     } catch (e) {
       print('Failed moveToTrash: $e');
@@ -44,12 +44,11 @@ class PostDeleteProvider with ChangeNotifier {
 
   Future<void> restorePost(String postId, String userId) async {
     try {
-      await _dio.patch("$baseUrl/post/updatePost/$postId", data: {
-        'isDelete': "false",
-      });
+      await _dio.put("$urlPosts/$postId",
+          data: {'isDelete': false, 'deleteTime': DateTime.now().toString()});
     } catch (e) {
       print('Failed restore: $e');
     }
-    await getAllPostsDelete(userId);
+   
   }
 }

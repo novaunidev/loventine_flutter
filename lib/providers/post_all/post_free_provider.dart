@@ -17,10 +17,15 @@ class PostFreeProvider with ChangeNotifier {
 
   Future<void> getAllFreePost(int page, bool reload, String userId) async {
     print("Đang get all free post");
-    try {
-      var result = await _dio.get("$baseUrl/post/getAllFreePost/$userId",
-          queryParameters: {'page': page, 'limit': 5});
 
+    if (userId == "") {
+      userId = '658b268ea62a946c86acdd22';
+    }
+
+    try {
+      var result = await _dio.get("$urlPosts/user/$userId",
+          queryParameters: {'page': page, 'limit': 5});
+      print(result.statusCode);
       List<dynamic> data = result.data as List<dynamic>;
       if (reload == true) {
         _postFree = [];
@@ -30,10 +35,16 @@ class PostFreeProvider with ChangeNotifier {
       } else {
         isGet = true;
       }
-
+      print(data);
       for (int i = 0; i < data.length; i++) {
-        _postFree.add(PostAll.toPostAll(data[i] as Map<String, dynamic>));
+          final userId = data[i]['author'];
+          final response = await Dio().get("$urlUsers/$userId");
+          print(response.data);
+          _postFree.add(PostAll.toPostFree(
+              data[i] as Map<String, dynamic>, response.data));
+        
       }
+      print(_postFree);
     } catch (e) {
       _postFree = [];
     }
@@ -59,10 +70,38 @@ class PostFreeProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  deleteFreePost(String postId) {
+  deleteFreePost(String postId, bool isDelete) {
     int index = _postFree.indexWhere((post) => post.id == postId);
     if (index != -1) {
-      _postFree.removeAt(index);
+      PostAll updatedPost = PostAll(
+          id: _postFree[index].id,
+          userId: _postFree[index].userId,
+          postingTime: _postFree[index].postingTime,
+          title: _postFree[index].title,
+          name: _postFree[index].name,
+          verified: _postFree[index].verified,
+          content: _postFree[index].content,
+          price: _postFree[index].price,
+          adviseType: _postFree[index].adviseType,
+          emoji: _postFree[index].emoji,
+          images: _postFree[index].images,
+          postType: _postFree[index].postType,
+          avatar: _postFree[index].avatar,
+          view: _postFree[index].view,
+          applyCount: _postFree[index].applyCount,
+          likeCounts: _postFree[index].likeCounts,
+          isLike: _postFree[index].isLike,
+          adviseTypeValue: _postFree[index].adviseTypeValue,
+          isDelete: isDelete,
+          deleteTime: DateTime.now().toString(),
+          userAddress: _postFree[index].userAddress,
+          userAge: _postFree[index].userAge,
+          isPublic: _postFree[index].isPublic,
+          isBookmark: _postFree[index].isBookmark,
+          online: _postFree[index].online,
+          countPaymentVerified: _postFree[index].countPaymentVerified);
+
+      _postFree[index] = updatedPost;
     }
 
     notifyListeners();

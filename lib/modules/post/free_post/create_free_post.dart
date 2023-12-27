@@ -158,6 +158,7 @@ class _CreateFreePostState extends State<CreateFreePost> {
   Future createFreePost() async {
     FreePost freePost = FreePost(
         userId: current_user_id,
+        author: current_user_id,
         title: _titleController1.text + _titleController2.text,
         content: _descriptionController.text,
         postingTime: DateTime.now().toIso8601String(),
@@ -167,10 +168,10 @@ class _CreateFreePostState extends State<CreateFreePost> {
 
     try {
       var response = await Dio().post(
-          "$baseUrl/post/createPost/${freePost.userId}",
+          urlPosts,
           data: freePost.toMap());
-
-      if (response.statusCode == 200) {
+      print(response.statusCode);
+      if (response.statusCode == 200 || response.statusCode == 201) {
         if (address != "" && (parts.isEmpty || address != parts.last)) {
           Provider.of<CardProfileProvider>(context, listen: false)
               .updateAddress(address, current_user_id);
@@ -233,7 +234,7 @@ class _CreateFreePostState extends State<CreateFreePost> {
       final File? _file = await assetEntities[i].file;
       final file = await compressFile(_file!);
       final cloudinaryFile = CloudinaryFile.fromFile(file!.path,
-          resourceType: CloudinaryResourceType.Image, folder: "post_free");
+          resourceType: CloudinaryResourceType.Image, folder: "loventine");
       files.add(file);
       cloudinaryList.add(cloudinaryFile);
     }
@@ -977,7 +978,7 @@ class _CreateFreePostState extends State<CreateFreePost> {
                         stateId: stateId,
                       ),
                       const SizedBox(
-                        height: 10,
+                        height: 70,
                       )
                     ],
                   ),

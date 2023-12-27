@@ -76,7 +76,7 @@ void main() async {
     Hive.openBox('loginBox'),
   ]);
 
-  await NotificationService().initNotification();
+  // await NotificationService().initNotification();
   runApp(
     MultiProvider(
       providers: [

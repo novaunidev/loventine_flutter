@@ -37,7 +37,7 @@ class _DeletePostPageState extends State<DeletePostPage> {
       await Provider.of<PostDeleteProvider>(context, listen: false)
           .getAllPostsDelete(widget.userId);
       _postsDelete =
-          Provider.of<PostDeleteProvider>(context, listen: false).postsDelete;
+          Provider.of<PostFreeProvider>(context, listen: false).postFree;
 
       setState(() {
         isLoading = false;
@@ -123,7 +123,7 @@ class _DeletePostPageState extends State<DeletePostPage> {
                                   fontFamily: "Loventine-Bold",
                                   fontSize: 18),
                             ),
-                            Consumer<PostDeleteProvider>(
+                            Consumer<PostFreeProvider>(
                               builder: (context, postsDelete, child) =>
                                   CustomScrollView(
                                 physics: const BouncingScrollPhysics(),
@@ -133,17 +133,19 @@ class _DeletePostPageState extends State<DeletePostPage> {
                                 slivers: [
                                   SliverList(
                                       delegate: SliverChildBuilderDelegate(
-                                    childCount: postsDelete.postsDelete.length,
+                                    childCount: postsDelete.postFree.length,
                                     (context, index) {
                                       final deletePost =
-                                          postsDelete.postsDelete[index];
+                                          postsDelete.postFree[index];
                                       String adviseTypeValue = deletePost
                                                   .adviseTypeValue
                                                   .toString() ==
                                               "0"
                                           ? ""
                                           : "${deletePost.adviseTypeValue}";
-                                      return Padding(
+                                      return deletePost.isDelete == false
+                                      ?SizedBox()
+                                      :Padding(
                                         padding: const EdgeInsets.only(top: 10),
                                         child: IntrinsicHeight(
                                             child: Row(
@@ -365,25 +367,7 @@ class _DeletePostPageState extends State<DeletePostPage> {
                                                             deletePost.id,
                                                             widget.userId)
                                                         .whenComplete(() {
-                                                      if (deletePost.postType ==
-                                                          "fee") {
-                                                        Provider.of<PostFeeProvider>(
-                                                                context,
-                                                                listen: false)
-                                                            .getAllFeePost(
-                                                                1,
-                                                                true,
-                                                                "",
-                                                                widget.userId,
-                                                                5);
-                                                        ;
-                                                      } else {
-                                                        Provider.of<PostFreeProvider>(
-                                                                context,
-                                                                listen: false)
-                                                            .getAllFreePostPage1(
-                                                                widget.userId);
-                                                      }
+                                                      Provider.of<PostFreeProvider>(context, listen: false).deleteFreePost(deletePost.id, false);
                                                     });
                                                   }
                                                 },
