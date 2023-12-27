@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loventine_flutter/values/app_color.dart';
 import 'package:loventine_flutter/widgets/app_text.dart';
 import '../models/user.dart';
 import '../utils/utils.dart';
@@ -33,27 +34,37 @@ class SuggestPage extends StatelessWidget {
             //       horizontal: 20.0, vertical: 20.0),
             //   child: UserInfoCard(size: size),
             // ),
+
+            verticalSpace(16),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Transform(
+                origin: Offset(0, size.width + 50),
+                transform: Matrix4.skew(0.2, 0.3),
+                alignment: FractionalOffset.bottomRight,
+                child: const RevolvingUserWidget(),
+              ),
+            ),
+            Text(
+              "Hiện có 30 user tương hợp với bạn",
+              style: AppText.contentRegular(color: AppColor.describetextcolor),
+            ),
             verticalSpace(8),
             const Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 AppTile(
                   label: "Nhắn tin",
-                  message: "Transfer to ",
-                  lottieAssetPath: "assets/lotties/payment.json",
+                  message: "chat",
+                  lottieAssetPath: "assets/lotties/chat_su.json",
                 ),
                 AppTile(
                   label: "Trang cá nhân",
                   message: "Request from ",
-                  lottieAssetPath: "assets/lotties/collect_money.json",
+                  lottieAssetPath: "assets/lotties/profile.json",
                 ),
               ],
             ),
-            verticalSpace(16),
-            const Align(
-                alignment: Alignment.bottomCenter,
-                child: RevolvingUserWidget()),
-            const Expanded(child: SizedBox()),
           ],
         ),
       ),

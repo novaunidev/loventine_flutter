@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loventine_flutter/values/app_color.dart';
 import '../utils/utils.dart';
 
 class AnimatedCursor extends StatefulWidget {
@@ -40,10 +41,10 @@ class AnimatedCursorState extends State<AnimatedCursor>
         );
       },
       child: Container(
-        width: 2.5,
+        width: 1.5,
         height: widget.height,
         decoration: BoxDecoration(
-          color: Colors.black,
+          color: AppColor.borderButton,
           borderRadius: BorderRadius.circular(12),
         ),
       ),

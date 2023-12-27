@@ -12,7 +12,7 @@ class AnimatedUserAvatar extends StatelessWidget {
     return Transform.translate(
       offset: const Offset(0, -48),
       child: SizedBox(
-        height: 96,
+        height: 50,
         child: TweenAnimationBuilder(
           duration: 600.ms,
           curve: Curves.easeInOutCirc,

@@ -25,6 +25,7 @@ import 'package:loventine_flutter/providers/post_all/post_free_of_user_provider.
 import 'package:loventine_flutter/providers/post_all/post_free_provider.dart';
 import 'package:loventine_flutter/providers/verify_provider.dart';
 import 'package:loventine_flutter/services/firebase_fcm.dart';
+import 'package:loventine_flutter/values/app_color.dart';
 import 'package:loventine_flutter/widgets/custom_snackbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:loventine_flutter/providers/chat/chat_page_provider.dart';
@@ -347,33 +348,32 @@ class _MainPageState extends State<MainPage> {
           ],
         ),
         extendBody: true,
-        bottomNavigationBar: BottomNavigationBar(
-          onTap: onTabTapped,
-          currentIndex: currentIndex,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
+        bottomNavigationBar: NavigationBar(
+          onDestinationSelected: onTabTapped,
+          selectedIndex: currentIndex,
+          destinations: const <Widget>[
+            NavigationDestination(
+              selectedIcon: Icon(Icons.home),
               icon: Icon(Icons.home),
               label: 'Home',
             ),
-            BottomNavigationBarItem(
+            NavigationDestination(
               icon: Icon(Icons.done),
               label: 'Gợi ý',
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.chat),
+            NavigationDestination(
+              icon: Badge(
+                label: Text('2'),
+                child: Icon(Icons.chat),
+              ),
               label: 'Tin nhắn',
             ),
-            BottomNavigationBarItem(
+            NavigationDestination(
               icon: Icon(Icons.add_circle_outline),
               label: 'Đăng',
             ),
           ],
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.white,
-          selectedItemColor: Colors.pink,
-          unselectedItemColor: Colors.grey,
-          showUnselectedLabels: true,
-          showSelectedLabels: true,
+          indicatorColor: AppColor.mainColor.withOpacity(0.5),
         ));
   }
 }

@@ -69,9 +69,9 @@ class _ResetPassState extends State<ResetPass> {
                       Center(
                         child: Column(
                           children: <Widget>[
-                            SvgPicture.asset(
-                              "assets/svgs/logo_name.svg",
-                              height: 30,
+                            Image.asset(
+                              "assets/images/loventine.png",
+                              height: 50,
                             ),
                             SizedBox(height: mediaHeight * 0.04),
                             Text('Đặt lại mật khẩu',

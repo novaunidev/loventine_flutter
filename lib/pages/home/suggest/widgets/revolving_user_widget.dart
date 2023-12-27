@@ -13,9 +13,9 @@ class RevolvingUserWidget extends StatefulWidget {
 }
 
 class _RevolvingUserWidgetState extends State<RevolvingUserWidget> {
-  final double distanceBetweenDottedCircle = 140;
-  final double smallestCircleHeight = 80;
-  final double delta = 20;
+  final double distanceBetweenDottedCircle = 125;
+  final double smallestCircleHeight = 50;
+  final double delta = 50;
 
   @override
   Widget build(BuildContext context) {

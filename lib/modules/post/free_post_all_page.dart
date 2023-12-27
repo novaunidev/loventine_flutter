@@ -277,9 +277,9 @@ class _FreePostAllPageState extends State<FreePostAllPage> {
                                         alignment: Alignment.centerLeft,
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
-                                          child: SvgPicture.asset(
-                                            "assets/svgs/logo_name.svg",
-                                            height: 30,
+                                          child: Image.asset(
+                                            "assets/images/loventine.png",
+                                            height: 50,
                                           ),
                                         ),
                                       ),
@@ -384,9 +384,9 @@ class _FreePostAllPageState extends State<FreePostAllPage> {
                           )
                         : Row(
                             children: [
-                              SvgPicture.asset(
-                                "assets/svgs/logo_name.svg",
-                                height: 30,
+                              Image.asset(
+                                "assets/images/loventine.png",
+                                height: 50,
                               ),
                               const SizedBox(
                                 width: 10,

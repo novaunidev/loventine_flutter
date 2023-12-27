@@ -94,9 +94,9 @@ void showBottomSheetLogin(BuildContext context, int page) {
           const TypeWriterTextEffect(
             text: "Chào mừng đến với",
           ),
-          SvgPicture.asset(
-            'assets/svgs/logo_name.svg',
-            height: 35,
+          Image.asset(
+            "assets/images/loventine.png",
+            height: 50,
           ),
         ],
       ),
@@ -143,8 +143,8 @@ void showBottomSheetLogin(BuildContext context, int page) {
           child: Column(
             children: [
               Image.asset(
-                'assets/images/logo_sign.png',
-                height: 110,
+                "assets/images/loventine.png",
+                height: 50,
               ),
               const Padding(
                 padding: EdgeInsets.all(12.0),
