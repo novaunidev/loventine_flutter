@@ -60,6 +60,7 @@ import 'pages/home/suggest/pages/suggest_page.dart';
 import 'providers/banner/banner_home_provider.dart';
 import 'providers/network_info.dart';
 import 'providers/page/home_page_provider.dart';
+import 'widgets/bottom_sheet_login.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -310,7 +311,11 @@ class _MainPageState extends State<MainPage> {
 
   void onTabTapped(int index) {
     setState(() {
-      currentIndex = index;
+      if (isLogin) {
+        currentIndex = index;
+      } else {
+        showBottomSheetLogin(context, 2);
+      }
     });
   }
 
@@ -351,25 +356,36 @@ class _MainPageState extends State<MainPage> {
         bottomNavigationBar: NavigationBar(
           onDestinationSelected: onTabTapped,
           selectedIndex: currentIndex,
-          destinations: const <Widget>[
+          destinations: <Widget>[
             NavigationDestination(
-              selectedIcon: Icon(Icons.home),
-              icon: Icon(Icons.home),
+              icon: Image.asset(
+                'assets/images/home.png',
+                height: 25,
+              ),
               label: 'Home',
             ),
             NavigationDestination(
-              icon: Icon(Icons.done),
+              icon: Image.asset(
+                'assets/images/star.png',
+                height: 25,
+              ),
               label: 'Gợi ý',
             ),
             NavigationDestination(
               icon: Badge(
-                label: Text('2'),
-                child: Icon(Icons.chat),
+                label: const Text('2'),
+                child: Image.asset(
+                  'assets/images/chat.png',
+                  height: 25,
+                ),
               ),
               label: 'Tin nhắn',
             ),
             NavigationDestination(
-              icon: Icon(Icons.add_circle_outline),
+              icon: Image.asset(
+                'assets/images/add.png',
+                height: 25,
+              ),
               label: 'Đăng',
             ),
           ],

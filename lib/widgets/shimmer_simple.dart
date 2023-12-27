@@ -12,7 +12,7 @@ class ShimmerSimple extends StatelessWidget {
         children: [
           Lottie.asset('assets/lotties/shimmer.json'),
           const Text(
-            "Bạn đợi Loviser xíu, sẽ nhanh thôi...",
+            "Bạn đợi Loventine xíu, sẽ nhanh thôi...",
             style: TextStyle(
               fontFamily: 'Loventine-Regular',
               fontSize: 15,

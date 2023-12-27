@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, unused_field
 
 import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -129,7 +129,11 @@ class _FreePostAllPageState extends State<FreePostAllPage> {
           await Provider.of<MessagePageProvider>(context, listen: false)
               .current_user_id;
       await Provider.of<PostFreeProvider>(context, listen: false)
-          .getAllFreePost(1, true, current_user_id);
+          .getAllFreePost(
+        1,
+        true,
+        isLogin ? current_user_id : "null",
+      );
       avatarUrl = Provider.of<UserImageProvider>(context, listen: false).avatar;
 
       postFree = Provider.of<PostFreeProvider>(context, listen: false).postFree;
@@ -279,7 +283,7 @@ class _FreePostAllPageState extends State<FreePostAllPage> {
                                           padding: const EdgeInsets.all(8.0),
                                           child: Image.asset(
                                             "assets/images/loventine.png",
-                                            height: 50,
+                                            height: 40,
                                           ),
                                         ),
                                       ),

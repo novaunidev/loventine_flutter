@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:dio/dio.dart';
@@ -27,6 +29,8 @@ import '../../../providers/page/message_page/message_page_provider.dart';
 import '../../../widgets/button/add_to_cart_button.dart';
 import 'models/free_post.dart';
 import 'package:flutter/foundation.dart' as foundation;
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class CreateFreePost extends StatefulWidget {
   const CreateFreePost({super.key});
@@ -152,6 +156,27 @@ class _CreateFreePostState extends State<CreateFreePost> {
       }
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<bool> isHateSpeech(String text) async {
+    final response = await http.post(
+      Uri.parse(hateSpeechUrl),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'text': _descriptionController.text,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final responseData = jsonDecode(response.body);
+      return responseData['is_hate_speech'];
+    } else {
+      // Handle error or return a default value
+      print('Request failed with status: ${response.statusCode}.');
+      return false;
     }
   }
 
@@ -960,25 +985,32 @@ class _CreateFreePostState extends State<CreateFreePost> {
                             height: 50),
                         borderRadius: BorderRadius.circular(24),
                         backgroundColor: AppColor.mainColor,
-                        onPressed: (id) {
-                          if (_formKey.currentState!.validate()) {
-                            if (id == AddToCartButtonStateId.idle) {
-                              setState(() {
-                                stateId = AddToCartButtonStateId.loading;
-                              });
-                              uploadImages(selectedAssetList);
-                            } else if (id == AddToCartButtonStateId.done) {
-                              setState(() {
-                                stateId = AddToCartButtonStateId.idle;
-                              });
+                        onPressed: (id) async {
+                          if (!await isHateSpeech('yourTextHere')) {
+                            if (_formKey.currentState!.validate()) {
+                              if (id == AddToCartButtonStateId.idle) {
+                                setState(() {
+                                  stateId = AddToCartButtonStateId.loading;
+                                });
+                                uploadImages(selectedAssetList);
+                              } else if (id == AddToCartButtonStateId.done) {
+                                setState(() {
+                                  stateId = AddToCartButtonStateId.idle;
+                                });
+                              }
                             }
+                          } else {
+                            CustomSnackbar.show(context,
+                                title: "Không được phép đăng!",
+                                message: "Do từ ngữ không phù hợp",
+                                type: SnackbarType.failure);
                           }
                         },
                         stateId: stateId,
                       ),
                       const SizedBox(
-                        height: 10,
-                      )
+                        height: 100,
+                      ),
                     ],
                   ),
                 ),
@@ -1153,7 +1185,7 @@ class _CreateFreePostState extends State<CreateFreePost> {
                         buttonMode: ButtonMode.MATERIAL,
                       ),
                     );
-                  })
+                  }),
         ],
       ),
     );

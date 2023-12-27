@@ -1,5 +1,5 @@
 final List<String> forbiddenWords = [
-  "Loviser",
+  "Loventine",
   "Đéo",
   "Cặc",
   "Lồn",
@@ -14,7 +14,7 @@ final List<String> forbiddenWords = [
   "Fuck",
   "Bitch"
 ];
-bool checkText(String value){
+bool checkText(String value) {
   for (String word in forbiddenWords) {
     if (value.toLowerCase().contains(word.toLowerCase())) {
       return true;

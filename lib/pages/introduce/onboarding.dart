@@ -70,7 +70,7 @@ class Onboarding extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(30, 50, 30, 0),
             child: Column(children: [
               const Text(
-                "Welcome to Loviser",
+                "Welcome to Loventine",
                 style: TextStyle(
                     fontSize: 40,
                     fontFamily: "Loventine-Black",
