@@ -41,7 +41,7 @@ void buildWindowsModalBottomSheet(BuildContext context) {
               ),
               const SizedBox(height: 16),
               const Text(
-                'Hãy tải ứng dụng Loviser trên Android hoặc iOS để xác minh danh tính của bạn.',
+                'Hãy tải ứng dụng Loventine trên Android hoặc iOS để xác minh danh tính của bạn.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16,
@@ -185,7 +185,7 @@ void showBottomSheetIdentityVerify(BuildContext context) {
                     ),
                     const TextSpan(
                       text:
-                          " cho biết rằng Loviser đã xác minh tài khoản của bạn là thật và trùng khớp với thông tin trên trang cá nhân, giúp tạo niềm tin và uy tín với cộng đồng người dùng Loviser",
+                          " cho biết rằng Loventine đã xác minh tài khoản của bạn là thật và trùng khớp với thông tin trên trang cá nhân, giúp tạo niềm tin và uy tín với cộng đồng người dùng Loventine",
                       style: TextStyle(
                         fontSize: 15,
                         fontFamily: "Loventine-Regular",
@@ -201,17 +201,17 @@ void showBottomSheetIdentityVerify(BuildContext context) {
               buildRow(
                 "assets/images/verified.png",
                 "Xác minh để Tạo Uy tín",
-                "Nâng cao độ tin cậy của hồ sơ Loviser với huy hiệu xác minh màu xanh, mở cửa giao tiếp an toàn trong cộng đồng",
+                "Nâng cao độ tin cậy của hồ sơ Loventine với huy hiệu xác minh màu xanh, mở cửa giao tiếp an toàn trong cộng đồng",
               ),
               buildRow(
                 "assets/images/verified.png",
                 "Huy hiệu xác minh, Định danh Đáng tin",
-                "Đánh dấu sự minh bạch và xác thực của bạn trên Loviser, tách biệt hồ sơ từ đám đông với huy hiệu xác minh",
+                "Đánh dấu sự minh bạch và xác thực của bạn trên Loventine, tách biệt hồ sơ từ đám đông với huy hiệu xác minh",
               ),
               buildRow(
                 "assets/images/verified.png",
                 "Kết nối Chất lượng với Huy hiệu",
-                "Khẳng định sự nghiêm túc và chuyên nghiệp trên Loviser, chứng minh bạn là thành viên đáng tin cậy với huy hiệu xác minh",
+                "Khẳng định sự nghiêm túc và chuyên nghiệp trên Loventine, chứng minh bạn là thành viên đáng tin cậy với huy hiệu xác minh",
               ),
             ],
           )),
@@ -314,7 +314,7 @@ void showBottomSheetIdentityVerify(BuildContext context) {
           child: Column(
             children: [
               const Text(
-                "Dùng camera trên điện thoại để chụp rõ thông tin trên giấy tờ tùy thân của bạn. Hệ thống thông minh của Loviser sẽ nhận diện các thông tin của bạn.",
+                "Dùng camera trên điện thoại để chụp rõ thông tin trên giấy tờ tùy thân của bạn. Hệ thống thông minh của Loventine sẽ nhận diện các thông tin của bạn.",
                 style: TextStyle(
                     fontSize: 15,
                     fontFamily: "Loventine-Regular",
@@ -640,7 +640,7 @@ void showBottomSheetIdentityVerify(BuildContext context) {
                 height: 10,
               ),
               const Text(
-                "Quá trình này thông thường mất khoảng 48 giờ. Chúng tôi sẽ gửi thông báo cho bạn qua Loviser khi việc này hoàn tất.",
+                "Quá trình này thông thường mất khoảng 48 giờ. Chúng tôi sẽ gửi thông báo cho bạn qua Loventine khi việc này hoàn tất.",
                 style: TextStyle(
                     fontSize: 15,
                     fontFamily: "Loventine-Regular",

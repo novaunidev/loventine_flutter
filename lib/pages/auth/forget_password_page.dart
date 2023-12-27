@@ -93,7 +93,7 @@ class _Forget_passState extends State<Forget_pass>
                     Text(
                       widget.type == 'user'
                           ? 'Quên mật khẩu'
-                          : 'Quên mật khẩu Ví LoviserPay',
+                          : 'Quên mật khẩu Ví LoventinePay',
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 24,

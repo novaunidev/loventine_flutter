@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:loventine_flutter/values/app_color.dart';
 import 'package:loventine_flutter/widgets/app_text.dart';
-import '../models/user.dart';
 import '../utils/utils.dart';
 import '../widgets/app_tile.dart';
 import '../widgets/revolving_user_widget.dart';
-import '../widgets/user_avatar.dart';
-import '../widgets/user_info_card.dart';
 
 class SuggestPage extends StatelessWidget {
   const SuggestPage({Key? key}) : super(key: key);
@@ -46,7 +43,7 @@ class SuggestPage extends StatelessWidget {
               ),
             ),
             Text(
-              "Hiện có 30 user tương hợp với bạn",
+              "Hiện có 30 người tương hợp với bạn",
               style: AppText.contentRegular(color: AppColor.describetextcolor),
             ),
             verticalSpace(8),

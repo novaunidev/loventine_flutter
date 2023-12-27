@@ -1,10 +1,10 @@
 /*
   DEPLOY
 */
-const baseUrl = "https://novacloud.online";
-// https://hqknqlono2223.onrender.com | http://localhost:5000
-
-// VPS => http://103.116.9.121
+const baseUrl = "https://loventine-apis.onrender.com";
+// https://loventine-apis.onrender.com| http://localhost:5000
+const hateSpeechUrl =
+    "https://dfc0-171-249-84-95.ngrok-free.app/api/detect-hate-speech/";
 
 const urlDeloy = baseUrl;
 
