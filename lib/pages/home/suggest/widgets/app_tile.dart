@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loventine_flutter/widgets/app_text.dart';
 import '../models/user.dart';
 // import '../pages/payment_screen.dart';
 import '../utils/utils.dart';
@@ -83,20 +84,19 @@ class _AppTileState extends State<AppTile> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 20, vertical: 16.0),
+                      horizontal: 20, vertical: 20.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Lottie.asset(
                         widget.lottieAssetPath,
-                        height: 60,
+                        height: 50,
                       ),
-                      verticalSpace(12),
+                      verticalSpace(5),
                       Text(
                         widget.label,
-                        style:
-                            const TextStyle(fontSize: 18, color: Colors.black),
+                        style: AppText.titleHeader(),
                       ),
                     ],
                   ),

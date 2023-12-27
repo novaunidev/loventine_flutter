@@ -1,5 +1,6 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:loventine_flutter/values/app_color.dart';
 
 class DottedCircle extends StatelessWidget {
   final double height;
@@ -9,10 +10,10 @@ class DottedCircle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DottedBorder(
-      color: Colors.black,
+      color: AppColor.blackColor,
       borderType: BorderType.Circle,
       strokeWidth: 1,
-      dashPattern: const [5, 5],
+      dashPattern: const [3, 3],
       child: Stack(
         alignment: Alignment.center,
         children: [
