@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, unused_field
 
 import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -129,7 +129,11 @@ class _FreePostAllPageState extends State<FreePostAllPage> {
           await Provider.of<MessagePageProvider>(context, listen: false)
               .current_user_id;
       await Provider.of<PostFreeProvider>(context, listen: false)
-          .getAllFreePost(1, true, current_user_id);
+          .getAllFreePost(
+        1,
+        true,
+        isLogin ? current_user_id : "null",
+      );
       avatarUrl = Provider.of<UserImageProvider>(context, listen: false).avatar;
 
       postFree = Provider.of<PostFreeProvider>(context, listen: false).postFree;
@@ -283,9 +287,9 @@ class _FreePostAllPageState extends State<FreePostAllPage> {
                                         alignment: Alignment.centerLeft,
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
-                                          child: SvgPicture.asset(
-                                            "assets/svgs/logo_name.svg",
-                                            height: 30,
+                                          child: Image.asset(
+                                            "assets/images/loventine.png",
+                                            height: 40,
                                           ),
                                         ),
                                       ),
@@ -390,9 +394,9 @@ class _FreePostAllPageState extends State<FreePostAllPage> {
                           )
                         : Row(
                             children: [
-                              SvgPicture.asset(
-                                "assets/svgs/logo_name.svg",
-                                height: 30,
+                              Image.asset(
+                                "assets/images/loventine.png",
+                                height: 50,
                               ),
                               const SizedBox(
                                 width: 10,

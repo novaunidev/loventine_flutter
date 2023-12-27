@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loventine_flutter/widgets/bottom_sheet_login.dart';
 import 'package:loventine_flutter/widgets/button/action_button.dart';
 
@@ -37,9 +36,9 @@ class _ResetPassConfirmState extends State<ResetPassConfirm> {
                   child: Container(
                     child: Column(
                       children: <Widget>[
-                        SvgPicture.asset(
-                          "assets/svgs/logo_name.svg",
-                          height: 30,
+                        Image.asset(
+                          "assets/images/loventine.png",
+                          height: 50,
                         ),
                         SizedBox(
                             height: MediaQuery.sizeOf(context).height * 0.1),

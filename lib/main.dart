@@ -25,6 +25,7 @@ import 'package:loventine_flutter/providers/post_all/post_free_of_user_provider.
 import 'package:loventine_flutter/providers/post_all/post_free_provider.dart';
 import 'package:loventine_flutter/providers/verify_provider.dart';
 import 'package:loventine_flutter/services/firebase_fcm.dart';
+import 'package:loventine_flutter/values/app_color.dart';
 import 'package:loventine_flutter/widgets/custom_snackbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:loventine_flutter/providers/chat/chat_page_provider.dart';
@@ -55,9 +56,11 @@ import '/providers/page/message_page/user_image_provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '/models/hives/userid.dart';
 import '/providers/post_all/post_fee_provider.dart';
+import 'pages/home/suggest/pages/suggest_page.dart';
 import 'providers/banner/banner_home_provider.dart';
 import 'providers/network_info.dart';
 import 'providers/page/home_page_provider.dart';
+import 'widgets/bottom_sheet_login.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -308,7 +311,11 @@ class _MainPageState extends State<MainPage> {
 
   void onTabTapped(int index) {
     setState(() {
-      currentIndex = index;
+      if (isLogin) {
+        currentIndex = index;
+      } else {
+        showBottomSheetLogin(context, 2);
+      }
     });
   }
 
@@ -317,8 +324,10 @@ class _MainPageState extends State<MainPage> {
       case 0:
         return const FreePostAllPage();
       case 1:
-        return isLogin ? MessagePage() : Container();
+        return isLogin ? const SuggestPage() : Container();
       case 2:
+        return isLogin ? MessagePage() : Container();
+      case 3:
         return isLogin ? const CreateFreePost() : Container();
 
       default:
@@ -339,33 +348,48 @@ class _MainPageState extends State<MainPage> {
             _buildScreen(0),
             _buildScreen(1),
             _buildScreen(2),
+            _buildScreen(3),
             // Add other screens if necessary
           ],
         ),
         extendBody: true,
-        bottomNavigationBar: BottomNavigationBar(
-          onTap: onTabTapped,
-          currentIndex: currentIndex,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
+        bottomNavigationBar: NavigationBar(
+          onDestinationSelected: onTabTapped,
+          selectedIndex: currentIndex,
+          destinations: <Widget>[
+            NavigationDestination(
+              icon: Image.asset(
+                'assets/images/home.png',
+                height: 25,
+              ),
               label: 'Home',
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.chat),
+            NavigationDestination(
+              icon: Image.asset(
+                'assets/images/star.png',
+                height: 25,
+              ),
+              label: 'Gợi ý',
+            ),
+            NavigationDestination(
+              icon: Badge(
+                label: const Text('2'),
+                child: Image.asset(
+                  'assets/images/chat.png',
+                  height: 25,
+                ),
+              ),
               label: 'Tin nhắn',
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.add_circle_outline),
+            NavigationDestination(
+              icon: Image.asset(
+                'assets/images/add.png',
+                height: 25,
+              ),
               label: 'Đăng',
             ),
           ],
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.white,
-          selectedItemColor: Theme.of(context).primaryColor,
-          unselectedItemColor: Colors.grey,
-          showUnselectedLabels: true,
-          showSelectedLabels: true,
+          indicatorColor: AppColor.mainColor.withOpacity(0.5),
         ));
   }
 }
