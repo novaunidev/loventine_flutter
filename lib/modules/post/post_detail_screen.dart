@@ -29,10 +29,13 @@ import '../../providers/post_all/comment_provider.dart';
 import '../../providers/post_all/post_free_of_user_provider.dart';
 import '../../providers/post_all/post_free_provider.dart';
 
+import '../../widgets/custom_snackbar.dart';
 import '../../widgets/list_images.dart';
 import '../../widgets/shimmer_loading/shimmer.dart';
 import '../../widgets/user_information/avatar_widget.dart';
 import 'free_post_all_page.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class PostDetailScreen extends StatefulWidget {
   final PostAll post;
@@ -90,6 +93,27 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
     });
   }
 
+  Future<bool> isHateSpeech(String text) async {
+    final response = await http.post(
+      Uri.parse(hateSpeechUrl),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'text': _commentController.text,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final responseData = jsonDecode(response.body);
+      return responseData['is_hate_speech'];
+    } else {
+      // Handle error or return a default value
+      print('Request failed with status: ${response.statusCode}.');
+      return false;
+    }
+  }
+
   startStreaming() {
     NetworkInfo networkInfo = NetworkInfo();
     networkInfo.onConnectivityChangedCallback = () => checkInternet();
@@ -133,15 +157,15 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
 
   Future<void> getAllCommentsOfAPost(String postId) async {
     try {
-      var result =
-          await _dio.get("$urlComments/post/$postId");
+      var result = await _dio.get("$urlComments/post/$postId");
 
       List<dynamic> data = result.data as List<dynamic>;
       commentAll = [];
       for (int i = 0; i < data.length; i++) {
         final userCommentId = data[i]["userCommentId"];
         final response = await Dio().get('$urlUsers/$userCommentId');
-        commentAll.add(Comment.toComment(data[i] as Map<String, dynamic>, response.data));
+        commentAll.add(
+            Comment.toComment(data[i] as Map<String, dynamic>, response.data));
       }
 
       // Lấy danh sách bài đăng có chứa "postType" = "fee"
@@ -324,68 +348,79 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                     ? const SizedBox()
                                     : InkWell(
                                         onTap: () async {
-                                          if (isLoadingBtn == false) {
-                                            setState(() {
-                                              isLoadingBtn = true;
-                                              _isTyping = false;
-                                            });
-                                            final result = await Connectivity()
-                                                .checkConnectivity();
-                                            if (result !=
-                                                ConnectivityResult.none) {
-                                              repName == ""
-                                                  ? CommentProvider()
-                                                      .addComment(
-                                                          widget.post.id,
-                                                          widget.userId,
-                                                          "658bc259dc7db7f924462d4a",
-                                                          DateTime.now()
-                                                              .toString(),
-                                                          "post",
-                                                          _commentController
-                                                              .text,
-                                                          widget.post.userId)
-                                                      .whenComplete(() {
-                                                      _commentController
-                                                          .clear();
-                                                      initializeComments();
-                                                      scrollController
-                                                          .animateTo(
+                                          if (!await isHateSpeech(
+                                              'yourTextHere')) {
+                                            if (isLoadingBtn == false) {
+                                              setState(() {
+                                                isLoadingBtn = true;
+                                                _isTyping = false;
+                                              });
+                                              final result =
+                                                  await Connectivity()
+                                                      .checkConnectivity();
+                                              if (result !=
+                                                  ConnectivityResult.none) {
+                                                repName == ""
+                                                    ? CommentProvider()
+                                                        .addComment(
+                                                            widget.post.id,
+                                                            widget.userId,
+                                                            "658bc259dc7db7f924462d4a",
+                                                            DateTime.now()
+                                                                .toString(),
+                                                            "post",
+                                                            _commentController
+                                                                .text,
+                                                            widget.post.userId)
+                                                        .whenComplete(() {
+                                                        _commentController
+                                                            .clear();
+                                                        initializeComments();
                                                         scrollController
-                                                            .position
-                                                            .maxScrollExtent,
-                                                        duration:
-                                                            const Duration(
-                                                                milliseconds:
-                                                                    500),
-                                                        curve: Curves.easeInOut,
-                                                      );
-                                                      setState(() {
-                                                        isLoadingBtn = false;
-                                                        _isTyping = false;
+                                                            .animateTo(
+                                                          scrollController
+                                                              .position
+                                                              .maxScrollExtent,
+                                                          duration:
+                                                              const Duration(
+                                                                  milliseconds:
+                                                                      500),
+                                                          curve:
+                                                              Curves.easeInOut,
+                                                        );
+                                                        setState(() {
+                                                          isLoadingBtn = false;
+                                                          _isTyping = false;
+                                                        });
+                                                      })
+                                                    : CommentProvider()
+                                                        .addComment(
+                                                            widget.post.id,
+                                                            widget.userId,
+                                                            currentParentCommentId,
+                                                            DateTime.now()
+                                                                .toString(),
+                                                            "comment",
+                                                            _commentController
+                                                                .text,
+                                                            "")
+                                                        .whenComplete(() {
+                                                        _commentController
+                                                            .clear();
+                                                        initializeComments();
+                                                        setState(() {
+                                                          isLoadingBtn = false;
+                                                          _isTyping = false;
+                                                        });
                                                       });
-                                                    })
-                                                  : CommentProvider()
-                                                      .addComment(
-                                                          widget.post.id,
-                                                          widget.userId,
-                                                          currentParentCommentId,
-                                                          DateTime.now()
-                                                              .toString(),
-                                                          "comment",
-                                                          _commentController
-                                                              .text,
-                                                          "")
-                                                      .whenComplete(() {
-                                                      _commentController
-                                                          .clear();
-                                                      initializeComments();
-                                                      setState(() {
-                                                        isLoadingBtn = false;
-                                                        _isTyping = false;
-                                                      });
-                                                    });
-                                            } else {}
+                                              } else {}
+                                            }
+                                          } else {
+                                            CustomSnackbar.show(context,
+                                                title: "Không được phép đăng!",
+                                                message:
+                                                    "Do từ ngữ không phù hợp",
+                                                type: SnackbarType.failure);
                                           }
                                         },
                                         child: isLoadingBtn
