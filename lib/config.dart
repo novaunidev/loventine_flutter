@@ -7,12 +7,12 @@ const baseUrl = "http://localhost:5000";
 // VPS => http://103.116.9.121
 // https://loventine-apis.onrender.com| http://localhost:5000
 const hateSpeechUrl =
-    "https://dfc0-171-249-84-95.ngrok-free.app/api/detect-hate-speech/";
+    "https://bc58-14-169-23-127.ngrok-free.app/api/detect-hate-speech/";
 
 const urlDeloy = baseUrl;
 
 //LOVENTINE
-const baseUrlLoventine = "https://1210-14-241-237-160.ngrok-free.app";
+const baseUrlLoventine = "https://9410-123-21-35-183.ngrok-free.app";
 const urlUsers = '$baseUrlLoventine/api/users';
 const urlPosts = '$baseUrlLoventine/api/posts';
 const urlComments = '$baseUrlLoventine/api/comments';
