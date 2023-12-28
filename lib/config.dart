@@ -2,9 +2,6 @@
   DEPLOY
 */
 const baseUrl = "http://localhost:5000";
-// https://hqknqlono2223.onrender.com | http://localhost:5000
-
-// VPS => http://103.116.9.121
 // https://loventine-apis.onrender.com| http://localhost:5000
 const hateSpeechUrl =
     "https://bc58-14-169-23-127.ngrok-free.app/api/detect-hate-speech/";
