@@ -159,7 +159,9 @@ class BookmarkProvider extends ChangeNotifier {
           isPublic: _bookmarks[index].isPublic,
           isBookmark: _bookmarks[index].isBookmark,
           online: _bookmarks[index].online,
-          countPaymentVerified: _bookmarks[index].countPaymentVerified);
+          countPaymentVerified: _bookmarks[index].countPaymentVerified,
+          comments: _bookmarks[index].comments,
+          likeAllUserId: _bookmarks[index].likeAllUserId);
 
       _bookmarks[index] = updatedPost;
     }
@@ -195,7 +197,9 @@ class BookmarkProvider extends ChangeNotifier {
           isPublic: isPublic,
           isBookmark: _bookmarks[index].isBookmark,
           online: _bookmarks[index].online,
-          countPaymentVerified: _bookmarks[index].countPaymentVerified);
+          countPaymentVerified: _bookmarks[index].countPaymentVerified,
+          comments: _bookmarks[index].comments,
+          likeAllUserId: _bookmarks[index].likeAllUserId);
 
       _bookmarks[index] = updatedPost;
     }
@@ -231,7 +235,9 @@ class BookmarkProvider extends ChangeNotifier {
           isPublic: _bookmarks[index].isPublic,
           isBookmark: isBookmark,
           online: _bookmarks[index].online,
-          countPaymentVerified: _bookmarks[index].countPaymentVerified);
+          countPaymentVerified: _bookmarks[index].countPaymentVerified,
+          comments: _bookmarks[index].comments,
+          likeAllUserId: _bookmarks[index].likeAllUserId);
 
       _bookmarks[index] = updatedPost;
     }
@@ -267,7 +273,9 @@ class BookmarkProvider extends ChangeNotifier {
           isPublic: _bookmarks[index].isPublic,
           isBookmark: _bookmarks[index].isBookmark,
           online: _bookmarks[index].online,
-          countPaymentVerified: _bookmarks[index].countPaymentVerified);
+          countPaymentVerified: _bookmarks[index].countPaymentVerified,
+          comments: _bookmarks[index].comments,
+          likeAllUserId: _bookmarks[index].likeAllUserId);
 
       _bookmarks[index] = updatedPost;
     }

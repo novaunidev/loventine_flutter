@@ -352,6 +352,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
                                                   isBookmark: post.isBookmark,
                                                   bookmarkId: "",
                                                   isDetail: false,
+                                                  post: post,
                                                   update: (p0, p1) {},
                                                 )
                                               ],

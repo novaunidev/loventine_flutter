@@ -577,6 +577,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                     isBookmark: _isBookmark,
                                     bookmarkId: "",
                                     isDetail: true,
+                                    post: widget.post,
                                     update: (p0, p1) {
                                       setState(() {
                                         _isBookmark = p0;

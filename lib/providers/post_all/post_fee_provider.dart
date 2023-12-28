@@ -95,7 +95,9 @@ class PostFeeProvider with ChangeNotifier {
           isPublic: _postFee[index].isPublic,
           isBookmark: isBookmark,
           online: _postFee[index].online,
-          countPaymentVerified: _postFee[index].countPaymentVerified);
+          countPaymentVerified: _postFee[index].countPaymentVerified,
+          comments: _postFee[index].comments,
+          likeAllUserId: _postFee[index].likeAllUserId);
 
       _postFee[index] = updatedPost;
     }

@@ -26,6 +26,7 @@ class PostFreeProvider with ChangeNotifier {
       var result = await _dio.get("$urlPosts/user/$userId",
           queryParameters: {'page': page, 'limit': 5});
       print(result.statusCode);
+      print(result.data);
       List<dynamic> data = result.data as List<dynamic>;
       if (reload == true) {
         _postFree = [];
@@ -44,7 +45,7 @@ class PostFreeProvider with ChangeNotifier {
               data[i] as Map<String, dynamic>, response.data));
         
       }
-      print(_postFree);
+      print(_postFree[0].name);
     } catch (e) {
       _postFree = [];
     }
@@ -99,7 +100,9 @@ class PostFreeProvider with ChangeNotifier {
           isPublic: _postFree[index].isPublic,
           isBookmark: _postFree[index].isBookmark,
           online: _postFree[index].online,
-          countPaymentVerified: _postFree[index].countPaymentVerified);
+          countPaymentVerified: _postFree[index].countPaymentVerified,
+          comments: _postFree[index].comments,
+          likeAllUserId: _postFree[index].likeAllUserId);
 
       _postFree[index] = updatedPost;
     }
@@ -138,7 +141,9 @@ class PostFreeProvider with ChangeNotifier {
           isPublic: _postFree[index].isPublic,
           isBookmark: _postFree[index].isBookmark,
           online: _postFree[index].online,
-          countPaymentVerified: _postFree[index].countPaymentVerified);
+          countPaymentVerified: _postFree[index].countPaymentVerified,
+          comments: _postFree[index].comments,
+          likeAllUserId: _postFree[index].likeAllUserId);
 
       _postFree[index] = updatedPost;
     }
@@ -178,7 +183,9 @@ class PostFreeProvider with ChangeNotifier {
           isPublic: _postFreePage1[index].isPublic,
           isBookmark: _postFreePage1[index].isBookmark,
           online: _postFreePage1[index].online,
-          countPaymentVerified: _postFreePage1[index].countPaymentVerified);
+          countPaymentVerified: _postFreePage1[index].countPaymentVerified,
+          comments: _postFreePage1[index].comments,
+          likeAllUserId: _postFreePage1[index].likeAllUserId);
       _postFreePage1[index] = updatedPost;
     }
 
@@ -214,7 +221,9 @@ class PostFreeProvider with ChangeNotifier {
           isPublic: isPublic,
           isBookmark: _postFree[index].isBookmark,
           online: _postFree[index].online,
-          countPaymentVerified: _postFree[index].countPaymentVerified);
+          countPaymentVerified: _postFree[index].countPaymentVerified,
+          comments: _postFree[index].comments,
+          likeAllUserId: _postFree[index].likeAllUserId);
 
       _postFree[index] = updatedPost;
     }
@@ -250,7 +259,9 @@ class PostFreeProvider with ChangeNotifier {
           isPublic: isPublic,
           isBookmark: _postFreePage1[index].isBookmark,
           online: _postFreePage1[index].online,
-          countPaymentVerified: _postFreePage1[index].countPaymentVerified);
+          countPaymentVerified: _postFreePage1[index].countPaymentVerified,
+          comments: _postFreePage1[index].comments,
+          likeAllUserId: _postFreePage1[index].likeAllUserId);
 
       _postFreePage1[index] = updatedPost;
     }
@@ -286,7 +297,9 @@ class PostFreeProvider with ChangeNotifier {
           isPublic: _postFree[index].isPublic,
           isBookmark: isBookmark,
           online: _postFree[index].online,
-          countPaymentVerified: _postFree[index].countPaymentVerified);
+          countPaymentVerified: _postFree[index].countPaymentVerified,
+          comments: _postFree[index].comments,
+          likeAllUserId: _postFree[index].likeAllUserId);
 
       _postFree[index] = updatedPost;
     }
@@ -322,7 +335,9 @@ class PostFreeProvider with ChangeNotifier {
           isPublic: _postFreePage1[index].isPublic,
           isBookmark: isBookmark,
           online: _postFreePage1[index].online,
-          countPaymentVerified: _postFreePage1[index].countPaymentVerified);
+          countPaymentVerified: _postFreePage1[index].countPaymentVerified,
+          comments: _postFreePage1[index].comments,
+          likeAllUserId: _postFreePage1[index].likeAllUserId);
 
       _postFreePage1[index] = updatedPost;
     }

@@ -767,6 +767,7 @@ Widget nameAndtimeFree(PostAll post, String nameMe, String userId, int index,
                     isBookmark: post.isBookmark,
                     bookmarkId: "",
                     isDetail: false,
+                    post: post,
                     update: (p0, p1) {},
                   )
                 : AppIcon(
