@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "loventine_flutter" "\0"
+            VALUE "FileDescription", "Loventine" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "loventine_flutter" "\0"
+            VALUE "InternalName", "Loventine" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "loventine_flutter.exe" "\0"
-            VALUE "ProductName", "loventine_flutter" "\0"
+            VALUE "OriginalFilename", "Loventine.exe" "\0"
+            VALUE "ProductName", "Loventine" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
