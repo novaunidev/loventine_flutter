@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:loventine_flutter/constant.dart';
-import 'package:loventine_flutter/modules/auth/app_auth.dart';
 import '../../config.dart';
 
 import '../../models/chat/get.dart' as GetApi;
@@ -53,9 +52,8 @@ class ChatRoomService {
     print(uri.toString());
     Response res = await get(
       uri,
-      headers: await appAuth.createHeaders(),
     );
-    appAuth.checkResponse(res);
+
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
       List<dynamic> data = body['data'];
@@ -82,9 +80,8 @@ class ChatRoomService {
 
       Response res = await patch(
         uri,
-        headers: await appAuth.createHeaders(),
       );
-      appAuth.checkResponse(res);
+
       switch (res.statusCode) {
         case 200:
           {
@@ -124,9 +121,8 @@ class ChatRoomService {
 
       Response res = await get(
         uri,
-        headers: await appAuth.createHeaders(),
       );
-      appAuth.checkResponse(res);
+
       if (res.statusCode == 200) {
         var jsonData = res.body;
         final data = json.decode(jsonData) as Map<String, dynamic>;
@@ -153,9 +149,8 @@ class ChatRoomService {
           "user2": userId_2,
           'type': type,
         },
-        headers: await appAuth.createHeaders(),
       );
-      appAuth.checkResponse(res);
+
       if (res.statusCode == 200) {
         print(res.body);
 
@@ -180,17 +175,21 @@ class ChatRoomService {
 
       Response res = await get(
         uri,
-        headers: await appAuth.createHeaders(),
       );
-      appAuth.checkResponse(res);
+
+      print(res.statusCode);
+
       if (res.statusCode == 200) {
         var jsonData = res.body;
         final data = json.decode(jsonData) as Map<String, dynamic>;
+        print(jsonData);
         return GetApi.ChatRoom.fromJson(data['data']);
       } else {
+        print("Lỗi❤️❤️❤️❤️ ");
         return errorMessageDefault;
       }
     } catch (e) {
+      print("Lỗi2❤️❤️❤️❤️:$e");
       return errorMessageDefault;
     }
   }
