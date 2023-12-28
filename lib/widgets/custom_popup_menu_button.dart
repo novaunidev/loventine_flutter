@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loventine_flutter/config.dart';
+import 'package:loventine_flutter/models/post_all.dart';
 import 'package:loventine_flutter/providers/post_all/bookmark_provider.dart';
 import 'package:loventine_flutter/providers/post_all/post_delete_provider.dart';
 import 'package:loventine_flutter/providers/post_all/post_fee_of_user_provider.dart';
@@ -21,6 +22,7 @@ class CustomPopupMenuButton extends StatelessWidget {
   final String nameMe;
   final String userId;
   final String postId;
+  final PostAll post;
   final bool isPublic;
   final String authorId;
   final int index;
@@ -43,7 +45,8 @@ class CustomPopupMenuButton extends StatelessWidget {
       required this.bookmarkId,
       required this.isDetail,
       required this.update,
-      this.paddingRight = 20});
+      this.paddingRight = 20,
+      required this.post});
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +93,7 @@ class CustomPopupMenuButton extends StatelessWidget {
       onSelected: (value) {
         if (value == 2) {
           authorId == userId
-              ? postDeleteProvider.moveToTrash(postId).whenComplete(() {
+              ? postDeleteProvider.moveToTrash(postId, post).whenComplete(() {
                   if (postType == "free") {
                     
                     postFreeProvider.deleteFreePost(postId, true);

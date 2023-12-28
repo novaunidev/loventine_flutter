@@ -66,7 +66,9 @@ class PostFreeOfUserProvider extends ChangeNotifier {
           isPublic: _postFreeUser[index].isPublic,
           isBookmark: _postFreeUser[index].isBookmark,
           online: _postFreeUser[index].online,
-          countPaymentVerified: _postFreeUser[index].countPaymentVerified);
+          countPaymentVerified: _postFreeUser[index].countPaymentVerified,
+          comments: _postFreeUser[index].comments,
+          likeAllUserId: _postFreeUser[index].likeAllUserId);
 
       _postFreeUser[index] = updatedPost;
     }
@@ -103,7 +105,9 @@ class PostFreeOfUserProvider extends ChangeNotifier {
           isPublic: isPublic,
           isBookmark: _postFreeUser[index].isBookmark,
           online: _postFreeUser[index].online,
-          countPaymentVerified: _postFreeUser[index].countPaymentVerified);
+          countPaymentVerified: _postFreeUser[index].countPaymentVerified,
+          comments: _postFreeUser[index].comments,
+          likeAllUserId: _postFreeUser[index].likeAllUserId);
 
       _postFreeUser[index] = updatedPost;
     }
@@ -140,7 +144,9 @@ class PostFreeOfUserProvider extends ChangeNotifier {
           isPublic: _postFreeUser[index].isPublic,
           isBookmark: isBookmark,
           online: _postFreeUser[index].online,
-          countPaymentVerified: _postFreeUser[index].countPaymentVerified);
+          countPaymentVerified: _postFreeUser[index].countPaymentVerified,
+          comments: _postFreeUser[index].comments,
+          likeAllUserId: _postFreeUser[index].likeAllUserId);
 
       _postFreeUser[index] = updatedPost;
     }

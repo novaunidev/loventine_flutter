@@ -33,22 +33,69 @@ class PostDeleteProvider with ChangeNotifier {
     }
   }
 
-  Future<void> moveToTrash(String postId) async {
+  Future<void> moveToTrash(String postId, PostAll post) async {
     try {
-      await _dio.put("$urlPosts/$postId",
-          data: {'isDelete': true, 'deleteTime': DateTime.now().toString()});
+      await _dio.put("$urlPosts/$postId", data: {
+        "_id": post.id,
+        "author": post.userId,
+        "title": post.title,
+        "content": post.content,
+        "postingTime": post.postingTime,
+        "likeAllUserId": post.likeAllUserId,
+        "likeCounts": post.likeCounts,
+        "comments": post.comments,
+        "images": post.images,
+        "postType": post.postType,
+        "price": null,
+        "adviseType": null,
+        "emoji": null,
+        "view": 0,
+        "applyCount": 0,
+        "isLike": post.isLike,
+        "isDelete": true,
+        'deleteTime': DateTime.now().toString(),
+        "userAddress": post.userAddress,
+        "isPublic": post.isPublic,
+        "isBookmark": false,
+        "countPaymentVerified": 0,
+        "numConsultingJobStart": 0,
+        "countPayment": 0,
+      });
     } catch (e) {
       print('Failed moveToTrash: $e');
     }
   }
 
-  Future<void> restorePost(String postId, String userId) async {
+  Future<void> restorePost(String postId, String userId, PostAll post) async {
     try {
-      await _dio.put("$urlPosts/$postId",
-          data: {'isDelete': false, 'deleteTime': DateTime.now().toString()});
+      await _dio.put("$urlPosts/$postId", data: {
+        "_id": post.id,
+        "author": post.userId,
+        "title": post.title,
+        "content": post.content,
+        "postingTime": post.postingTime,
+        "likeAllUserId": post.likeAllUserId,
+        "likeCounts": post.likeCounts,
+        "comments": post.comments,
+        "images": post.images,
+        "postType": post.postType,
+        "price": null,
+        "adviseType": null,
+        "emoji": null,
+        "view": 0,
+        "applyCount": 0,
+        "isLike": post.isLike,
+        "isDelete": false,
+        'deleteTime': DateTime.now().toString(),
+        "userAddress": post.userAddress,
+        "isPublic": post.isPublic,
+        "isBookmark": false,
+        "countPaymentVerified": 0,
+        "numConsultingJobStart": 0,
+        "countPayment": 0,
+      });
     } catch (e) {
       print('Failed restore: $e');
     }
-   
   }
 }
