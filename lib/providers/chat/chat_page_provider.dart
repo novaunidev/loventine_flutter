@@ -294,9 +294,8 @@ class ChatPageProvider extends ChangeNotifier {
           'numLoad': numLoad.toString(),
           'userId': SocketProvider.current_user_id,
         },
-        headers: await appAuth.createHeaders(),
       );
-      appAuth.checkResponse(result);
+
       var body = jsonDecode(result.body);
 
       List<dynamic> data = body as List<dynamic>;

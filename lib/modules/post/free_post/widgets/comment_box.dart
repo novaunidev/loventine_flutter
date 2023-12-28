@@ -72,8 +72,7 @@ class _CommentBoxState extends State<CommentBox> {
 
   Future<void> getAllCommentsOfAPost(String postId) async {
     try {
-      var result =
-          await _dio.get("$urlComments/post/$postId");
+      var result = await _dio.get("$urlComments/post/$postId");
       List<dynamic> data = result.data as List<dynamic>;
       commentAll = [];
       for (int i = 0; i < data.length; i++) {
@@ -81,7 +80,8 @@ class _CommentBoxState extends State<CommentBox> {
         final response = await Dio().get('$urlUsers/$userCommentId');
         print(data[i]);
         print(response.data);
-        commentAll.add(Comment.toComment(data[i] as Map<String, dynamic>, response.data));
+        commentAll.add(
+            Comment.toComment(data[i] as Map<String, dynamic>, response.data));
       }
       print(commentAll);
       commentOffline = [];
@@ -519,7 +519,8 @@ class _CommentBoxState extends State<CommentBox> {
                                                         time: DateTime.now()
                                                             .toString(),
                                                         replyType: "post",
-                                                        parentCommentId: "658bc259dc7db7f924462d4a",
+                                                        parentCommentId:
+                                                            "658bc259dc7db7f924462d4a",
                                                         userPostId:
                                                             widget.userPostId,
                                                         childrenComments: []));
@@ -539,7 +540,8 @@ class _CommentBoxState extends State<CommentBox> {
                                                         time: DateTime.now()
                                                             .toString(),
                                                         replyType: "post",
-                                                        parentCommentId: "658bc259dc7db7f924462d4a",
+                                                        parentCommentId:
+                                                            "658bc259dc7db7f924462d4a",
                                                         userPostId:
                                                             widget.userPostId,
                                                         childrenComments: []));
@@ -794,11 +796,11 @@ class _CommentItemState extends State<CommentItem> {
                                     alignment: Alignment.centerLeft,
                                     onPressed: () {
                                       //
-                                      print('kiet here 3');
+
                                       CustomSnackbar.show(
                                         context,
                                         title:
-                                            'Đang đi chuyển đến khung chat ghép đôi, vui lòng đợi',
+                                            'Đang di chuyển đến khung chat ghép đôi, vui lòng đợi',
                                         type: SnackbarType.success,
                                       );
                                       goToMatchingChatRoom(
@@ -1500,6 +1502,9 @@ class _CommentLv2WidgetState extends State<CommentLv2Widget> {
 }
 
 Future<void> goToMatchingChatRoom(String userId, context) async {
+  print("😌🎉🎉🎉🎉🎉🎉🎉🎉🎉");
+  print(userId);
+  print(SocketProvider.current_user_id);
   try {
     await ChatRoomService.create(
         SocketProvider.current_user_id, userId, CHAT_ROOM_TYPE.MATCHING);

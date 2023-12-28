@@ -1,7 +1,7 @@
 /*
   DEPLOY
 */
-const baseUrl = "https://loventine-apis.onrender.com";
+const baseUrl = "http://localhost:5000";
 // https://hqknqlono2223.onrender.com | http://localhost:5000
 
 // VPS => http://103.116.9.121
@@ -12,13 +12,12 @@ const hateSpeechUrl =
 const urlDeloy = baseUrl;
 
 //LOVENTINE
-const baseUrlLoventine = "https://a7e7-14-241-237-160.ngrok-free.app";
+const baseUrlLoventine = "https://localhost:7079";
 const urlUsers = '$baseUrlLoventine/api/users';
 const urlPosts = '$baseUrlLoventine/api/posts';
 const urlComments = '$baseUrlLoventine/api/comments';
 const urlLikes = '$baseUrlLoventine/api/likes';
 const urlBookmarks = '$baseUrlLoventine/api/bookmarks';
-
 
 const urlSocket_deploy = baseUrl;
 const urlGetAlUser = '$baseUrl/auth/getAllUser'; // get

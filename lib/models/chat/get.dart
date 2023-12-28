@@ -27,39 +27,35 @@ class ChatRoom {
       required this.isConsultant});
 
   ChatRoom.fromJson(Map<String, dynamic> json) {
-    partner = User.fromJson(json['partner']);
-    me = User.fromJson(json['me']);
-    sId = json['_id'];
-    type = json['type'];
-    isExprired = json['isExprired'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
-    iV = json['__v'];
+    partner = User.fromJson(json['partner'] ?? {});
+    me = User.fromJson(json['me'] ?? {});
+    sId = json['_id'] ?? '';
+    type = json['type'] ?? '';
+    isExprired = json['isExprired'] ?? false;
+    createdAt = json['createdAt'] ?? '';
+    updatedAt = json['updatedAt'] ?? '';
+    iV = json['__v'] ?? 0;
+    isConsultant = json['isConsultant'] ?? false;
     lastMessage = json['lastMessage'] != null
-        ? new Message.fromJson(json['lastMessage'])
+        ? Message.fromJson(json['lastMessage'])
         : null;
-    isConsultant = json['isConsultant'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> ChatRoom = new Map<String, dynamic>();
-    if (this.partner != null) {
-      ChatRoom['partner'] = this.partner.toJson();
-    }
-    if (this.me != null) {
-      ChatRoom['me'] = this.me.toJson();
-    }
-    ChatRoom['_id'] = this.sId;
-    ChatRoom['type'] = this.type;
-    ChatRoom['isExprired'] = this.isExprired;
-    ChatRoom['createdAt'] = this.createdAt;
-    ChatRoom['updatedAt'] = this.updatedAt;
-    ChatRoom['__v'] = this.iV;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['partner'] = this.partner.toJson();
+    data['me'] = this.me.toJson();
+    data['_id'] = this.sId;
+    data['type'] = this.type;
+    data['isExprired'] = this.isExprired;
+    data['createdAt'] = this.createdAt;
+    data['updatedAt'] = this.updatedAt;
+    data['__v'] = this.iV;
     if (this.lastMessage != null) {
-      ChatRoom['lastMessage'] = this.lastMessage?.toJson();
+      data['lastMessage'] = this.lastMessage?.toJson();
     }
-    ChatRoom['isConsultant'] = this.isConsultant;
-    return ChatRoom;
+    data['isConsultant'] = this.isConsultant;
+    return data;
   }
 }
 
@@ -80,24 +76,23 @@ class User {
       required this.isAllowNotifiCation});
 
   User.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
-    name = json['name'];
-    online = json['online'];
-    avatarUrl = json['avatarUrl'];
-    numUnwatched = json['num_unwatched'];
-    isAllowNotifiCation = json['isAllowNotifiCation'];
+    sId = json['_id'] ?? '';
+    name = json['name'] ?? 'Minh Quang';
+    online = json['online'] ?? true;
+    avatarUrl = json['avatarUrl'] ?? defaultAvatar;
+    numUnwatched = json['num_unwatched'] ?? 0;
+    isAllowNotifiCation = json['isAllowNotifiCation'] ?? false;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> ChatRoom = new Map<String, dynamic>();
-    ChatRoom['_id'] = this.sId;
-    ChatRoom['name'] = this.name;
-    ChatRoom['online'] = this.online;
-    ChatRoom['avatarUrl'] =
-        ChatRoom['avatarUrl'] == null ? defaultAvatar : ChatRoom['avatarUrl'];
-    ChatRoom['num_unwatched'] = this.numUnwatched;
-    ChatRoom['isAllowNotifiCation'] = this.isAllowNotifiCation;
-    return ChatRoom;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['name'] = this.name;
+    data['online'] = this.online;
+    data['avatarUrl'] = this.avatarUrl;
+    data['num_unwatched'] = this.numUnwatched;
+    data['isAllowNotifiCation'] = this.isAllowNotifiCation;
+    return data;
   }
 }
 
