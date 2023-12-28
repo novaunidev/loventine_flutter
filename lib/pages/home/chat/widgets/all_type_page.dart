@@ -84,56 +84,56 @@ class AllTypePage extends StatelessWidget {
 
   groupWidgets(context, List<ChatRoom> chatrooms, String title) {
     return [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              if (title == "Việc làm của tôi")
-                Padding(
-                  padding: const EdgeInsets.only(right: 5),
-                  child: Image.asset(
-                    "assets/images/chat_my_job.png",
-                    height: 27,
-                  ),
-                ),
-              if (title == "Tôi thuê tư vấn")
-                Padding(
-                  padding: const EdgeInsets.only(right: 5),
-                  child: Image.asset(
-                    "assets/images/i_hire.png",
-                    height: 27,
-                  ),
-                ),
-              if (title == "Ghép cặp")
-                Padding(
-                  padding: const EdgeInsets.only(right: 5),
-                  child: Image.asset(
-                    "assets/images/find_love.png",
-                    height: 27,
-                  ),
-                ),
-              Text(
-                '$title',
-                style:
-                    const TextStyle(fontFamily: "Loventine-Bold", fontSize: 15),
-              ),
-            ],
-          ),
-          GestureDetector(
-            onTap: () {
-              changeSelected(title);
-            },
-            child: const Text(
-              'Xem thêm',
-              style: TextStyle(
-                  fontFamily: "Loventine-Semibold",
-                  fontSize: 15,
-                  color: AppColor.mainColor),
-            ),
-          ),
-        ],
-      ),
+      // Row(
+      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //   children: [
+      //     Row(
+      //       children: [
+      //         // if (title == "Việc làm của tôi")
+      //         //   Padding(
+      //         //     padding: const EdgeInsets.only(right: 5),
+      //         //     child: Image.asset(
+      //         //       "assets/images/chat_my_job.png",
+      //         //       height: 27,
+      //         //     ),
+      //         //   ),
+      //         // if (title == "Tôi thuê tư vấn")
+      //         //   Padding(
+      //         //     padding: const EdgeInsets.only(right: 5),
+      //         //     child: Image.asset(
+      //         //       "assets/images/i_hire.png",
+      //         //       height: 27,
+      //         //     ),
+      //         //   ),
+      //         // if (title == "Ghép cặp")
+      //         //   Padding(
+      //         //     padding: const EdgeInsets.only(right: 5),
+      //         //     child: Image.asset(
+      //         //       "assets/images/find_love.png",
+      //         //       height: 27,
+      //         //     ),
+      //         //   ),
+      //         Text(
+      //           '$title',
+      //           style:
+      //               const TextStyle(fontFamily: "Loventine-Bold", fontSize: 15),
+      //         ),
+      //       ],
+      //     ),
+      //     GestureDetector(
+      //       onTap: () {
+      //         changeSelected(title);
+      //       },
+      //       child: const Text(
+      //         'Xem thêm',
+      //         style: TextStyle(
+      //             fontFamily: "Loventine-Semibold",
+      //             fontSize: 15,
+      //             color: AppColor.mainColor),
+      //       ),
+      //     ),
+      //   ],
+      // ),
       const SizedBox(height: 16),
       if (chatrooms.isEmpty)
         const Text(
@@ -176,10 +176,10 @@ class AllTypePage extends StatelessWidget {
       return false;
     }).toList();
     return Column(children: [
-      ...groupWidgets(context, myjobs, my_jobs),
-      const SizedBox(height: 16),
-      ...groupWidgets(context, myhirings, my_hirings),
-      const SizedBox(height: 16),
+      // ...groupWidgets(context, myjobs, my_jobs),
+      // const SizedBox(height: 16),
+      // ...groupWidgets(context, myhirings, my_hirings),
+      // const SizedBox(height: 16),
       ...groupWidgets(context, matchings, matching),
     ]);
   }
