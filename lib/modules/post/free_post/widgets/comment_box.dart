@@ -1537,15 +1537,15 @@ class _CommentLv2WidgetState extends State<CommentLv2Widget> {
 Future<void> goToMatchingChatRoom(String userId, context) async {
   print("😌🎉🎉🎉🎉🎉🎉🎉🎉🎉");
   print(userId);
-  print(SocketProvider.current_user_id);
+  print("658dc3552108076094ac6824");
   try {
-    await ChatRoomService.create(
-        SocketProvider.current_user_id, userId, CHAT_ROOM_TYPE.MATCHING);
+    await ChatRoomService.create("658dc3552108076094ac6824",
+        "658dc3922108076094ac6864", CHAT_ROOM_TYPE.MATCHING);
     final result = await ChatRoomService.getOneWith(
-        SocketProvider.current_user_id,
-        userId,
+        "658dc3552108076094ac6824",
+        "658dc3922108076094ac6864",
         CHAT_ROOM_TYPE.MATCHING,
-        SocketProvider.current_user_id);
+        "658dc3552108076094ac6824");
 
     if (result.runtimeType.toString() != 'String') {
       Navigator.of(context).push(

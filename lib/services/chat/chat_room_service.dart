@@ -20,7 +20,8 @@ class ChatRoomService {
     String? toCreatedAt,
   ) async {
     Map<String, String> paramsValue = Map<String, String>();
-    paramsValue["userId"] = SocketProvider.current_user_id;
+    paramsValue["userId"] =
+        "658dc3552108076094ac6824"; //SocketProvider.current_user_id
     if (skipNum != null) {
       paramsValue["skipNum"] = skipNum.toString();
     }
