@@ -30,6 +30,8 @@ class PostAll {
   final bool isBookmark;
   final bool online;
   int countPaymentVerified;
+  final List<String> likeAllUserId;
+  final List<String> comments;
 
   PostAll(
       {required this.id,
@@ -57,7 +59,9 @@ class PostAll {
       required this.isPublic,
       required this.isBookmark,
       required this.online,
-      required this.countPaymentVerified});
+      required this.countPaymentVerified,
+      required this.comments,
+      required this.likeAllUserId});
 
   static PostAll toPostAll(Map<String, dynamic> data) {
     return PostAll(
@@ -86,7 +90,9 @@ class PostAll {
         isPublic: data["isPublic"] ?? true,
         isBookmark: data["isBookmark"] ?? false,
         online: false,
-        countPaymentVerified: data["countPaymentVerified"] ?? 0);
+        countPaymentVerified: data["countPaymentVerified"] ?? 0,
+        comments: List<String>.from(data["comments"]),
+        likeAllUserId: List<String>.from(data["likeAllUserId"]));
   }
 
     static PostAll toPostFree(Map<String, dynamic> data, Map<String, dynamic> data1) {
@@ -117,7 +123,9 @@ class PostAll {
         isPublic: data["isPublic"] ?? true,
         isBookmark: data["isBookmark"] ?? false,
         online: false,
-        countPaymentVerified: data["countPaymentVerified"] ?? 0);
+        countPaymentVerified: data["countPaymentVerified"] ?? 0,
+        comments: List<String>.from(data["comments"]),
+        likeAllUserId: List<String>.from(data["likeAllUserId"]));
   }
 
   static Map<String, String> adviseTypeLabels = {

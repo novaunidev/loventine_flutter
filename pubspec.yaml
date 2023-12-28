@@ -81,6 +81,9 @@ dependencies:
   lecle_volume_flutter: ^0.0.1+1
   flutter_secure_storage: ^9.0.0
   staggered_grid_view_flutter: ^0.0.4
+  image: ^4.1.3
+  tflite_flutter:
+    path: lib/widgets/flutter-tflite
 
 dev_dependencies:
   flutter_test:
@@ -112,6 +115,9 @@ flutter:
     - assets/rives/
     - assets/lotties/
     - assets/svgs/
+    - assets/tflite/porn/model.tflite
+    - assets/tflite/porn/labels.txt
+    - assets/tflite/porn/
 
   fonts:
     - family: Nunito-SemiBoldItalic

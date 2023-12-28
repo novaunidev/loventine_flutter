@@ -67,7 +67,9 @@ class PostFeeOfUserProvider extends ChangeNotifier {
           isPublic: _postFeeUser[index].isPublic,
           isBookmark: isBookmark,
           online: _postFeeUser[index].online,
-          countPaymentVerified: _postFeeUser[index].countPaymentVerified);
+          countPaymentVerified: _postFeeUser[index].countPaymentVerified,
+          comments: _postFeeUser[index].comments,
+          likeAllUserId: _postFeeUser[index].likeAllUserId);
 
       _postFeeUser[index] = updatedPost;
     }

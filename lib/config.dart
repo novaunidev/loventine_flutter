@@ -12,7 +12,7 @@ const hateSpeechUrl =
 const urlDeloy = baseUrl;
 
 //LOVENTINE
-const baseUrlLoventine = "https://1210-14-241-237-160.ngrok-free.app";
+const baseUrlLoventine = "https://localhost:7079";
 const urlUsers = '$baseUrlLoventine/api/users';
 const urlPosts = '$baseUrlLoventine/api/posts';
 const urlComments = '$baseUrlLoventine/api/comments';

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
+import 'package:loventine_flutter/helper/image_classification_helper.dart';
 import 'package:loventine_flutter/models/province/vn_provinces.dart';
 import 'package:loventine_flutter/modules/post/free_post/widgets/media_service.dart';
 import 'package:loventine_flutter/modules/profile/pages/my_profile_page.dart';
@@ -31,6 +32,7 @@ import 'models/free_post.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:image/image.dart' as img;
 
 class CreateFreePost extends StatefulWidget {
   const CreateFreePost({super.key});
@@ -73,10 +75,15 @@ class _CreateFreePostState extends State<CreateFreePost> {
   bool isShowTextAddress = false;
   bool _isPublic = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  ImageClassificationHelper? imageClassificationHelper;
+  img.Image? image;
+  Map<String, double>? classification;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    imageClassificationHelper = ImageClassificationHelper();
+    imageClassificationHelper!.initHelper();
     _titleController1.text = emojis[0];
     _titleController2.text = purposes[0];
     _titleController1.addListener(
@@ -129,6 +136,42 @@ class _CreateFreePostState extends State<CreateFreePost> {
     // TODO: implement dispose
     super.dispose();
     _descriptionController.dispose();
+    imageClassificationHelper?.close();
+  }
+
+  void cleanResult() {
+    image = null;
+    classification = null;
+    setState(() {});
+  }
+
+  // Process picked image
+  Future<String> processImage(String? imagePath) async {
+    String firstKey = '';
+    if (imagePath != null) {
+      // Read image bytes from file
+      final imageData = File(imagePath!).readAsBytesSync();
+
+      image = img.decodeImage(imageData);
+      setState(() {});
+      classification = await imageClassificationHelper?.inferenceImage(image!);
+      firstKey = classification!.keys.first;
+    }
+    return firstKey == 'normal' ? 'normal' : 'porn';
+  }
+
+  Future<bool> checkAllImage() async {
+    for (int i = 0; i < selectedAssetList.length; i++) {
+      final imagePath = await selectedAssetList[i].file;
+      String check = await processImage(imagePath!.path);
+      if (check == 'porn') {
+        return true;
+      }
+    }
+    setState(() {
+      stateId = AddToCartButtonStateId.idle;
+    });
+    return false;
   }
 
   final cloudinary = CloudinaryPublic('dkkdavbbq', 'mtrkthmf', cache: false);
@@ -192,9 +235,7 @@ class _CreateFreePostState extends State<CreateFreePost> {
         isPublic: _isPublic);
 
     try {
-      var response = await Dio().post(
-          urlPosts,
-          data: freePost.toMap());
+      var response = await Dio().post(urlPosts, data: freePost.toMap());
       print(response.statusCode);
       if (response.statusCode == 200 || response.statusCode == 201) {
         if (address != "" && (parts.isEmpty || address != parts.last)) {
@@ -790,6 +831,7 @@ class _CreateFreePostState extends State<CreateFreePost> {
                           return selectedAssetList.isEmpty
                               ? InkWell(
                                   onTap: () {
+                                    cleanResult();
                                     FocusManager.instance.primaryFocus
                                         ?.unfocus();
                                     scrollController.animateTo(
@@ -838,6 +880,7 @@ class _CreateFreePostState extends State<CreateFreePost> {
                                       ? const SizedBox()
                                       : InkWell(
                                           onTap: () {
+                                            cleanResult();
                                             scrollController.animateTo(
                                               scrollController
                                                   .position.maxScrollExtent,
@@ -987,24 +1030,31 @@ class _CreateFreePostState extends State<CreateFreePost> {
                         borderRadius: BorderRadius.circular(24),
                         backgroundColor: AppColor.mainColor,
                         onPressed: (id) async {
-                          if (!await isHateSpeech('yourTextHere')) {
-                            if (_formKey.currentState!.validate()) {
-                              if (id == AddToCartButtonStateId.idle) {
-                                setState(() {
-                                  stateId = AddToCartButtonStateId.loading;
-                                });
-                                uploadImages(selectedAssetList);
-                              } else if (id == AddToCartButtonStateId.done) {
-                                setState(() {
-                                  stateId = AddToCartButtonStateId.idle;
-                                });
+                          if (_formKey.currentState!.validate()) {
+                            if (id == AddToCartButtonStateId.idle) {
+                              setState(() {
+                                stateId = AddToCartButtonStateId.loading;
+                              });
+                              if (await checkAllImage() == false) {
+                                if (!await isHateSpeech('yourTextHere')) {
+                                  uploadImages(selectedAssetList);
+                                } else {
+                                  CustomSnackbar.show(context,
+                                      title: "Không được phép đăng!",
+                                      message: "Do từ ngữ không phù hợp",
+                                      type: SnackbarType.failure);
+                                }
+                              } else {
+                                CustomSnackbar.show(context,
+                                    title: "Không được phép đăng!",
+                                    message: "Do hình ảnh không phù hợp",
+                                    type: SnackbarType.failure);
                               }
+                            } else if (id == AddToCartButtonStateId.done) {
+                              setState(() {
+                                stateId = AddToCartButtonStateId.idle;
+                              });
                             }
-                          } else {
-                            CustomSnackbar.show(context,
-                                title: "Không được phép đăng!",
-                                message: "Do từ ngữ không phù hợp",
-                                type: SnackbarType.failure);
                           }
                         },
                         stateId: stateId,
@@ -1193,7 +1243,7 @@ class _CreateFreePostState extends State<CreateFreePost> {
   }
 
   Widget assetWidget(AssetEntity assetEntity) => GestureDetector(
-        onTap: () {
+        onTap: () async {
           if (selectedAssetList.contains(assetEntity)) {
             setState(() {
               selectedAssetList.remove(assetEntity);

@@ -365,7 +365,8 @@ class _DeletePostPageState extends State<DeletePostPage> {
                                                             listen: false)
                                                         .restorePost(
                                                             deletePost.id,
-                                                            widget.userId)
+                                                            widget.userId,
+                                                            deletePost)
                                                         .whenComplete(() {
                                                       Provider.of<PostFreeProvider>(context, listen: false).deleteFreePost(deletePost.id, false);
                                                     });
