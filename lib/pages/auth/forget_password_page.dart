@@ -85,9 +85,9 @@ class _Forget_passState extends State<Forget_pass>
                           },
                           icon: const Icon(Icons.arrow_back_ios)),
                     ),
-                    SvgPicture.asset(
-                      'assets/svgs/logo.svg',
-                      height: 100,
+                    Image.asset(
+                      "assets/images/loventine.png",
+                      height: 50,
                     ),
                     SizedBox(height: mediaHeight * 0.04),
                     Text(
