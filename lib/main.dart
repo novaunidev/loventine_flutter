@@ -312,6 +312,7 @@ class _MainPageState extends State<MainPage> {
   void onTabTapped(int index) {
     setState(() {
       if (isLogin) {
+        Provider.of<ChatRoomProvider>(context, listen: false).getChatRooms({});
         currentIndex = index;
       } else {
         showBottomSheetLogin(context, 2);
@@ -393,3 +394,7 @@ class _MainPageState extends State<MainPage> {
         ));
   }
 }
+
+// flutter: SocketProvider.current_user_id 658dc3552108076094ac6824
+// flutter: userId 658dc3922108076094ac6864
+// flutter:  CHAT_ROOM_TYPE.MATCHING matching

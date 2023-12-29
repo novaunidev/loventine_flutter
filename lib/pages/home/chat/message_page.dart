@@ -120,60 +120,60 @@ class _MessagePageState extends State<MessagePage> {
       ),
     );
 
-    final filter_bar = SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
-      scrollDirection: Axis.horizontal,
-      child: GroupButton(
-        controller: controller,
-        options: GroupButtonOptions(
-          selectedTextStyle: AppText.contentBold(color: Colors.white),
-          unselectedTextStyle: const TextStyle(
-            color: Colors.white,
-            fontFamily: 'Loventine-Regular',
-            fontSize: 15,
-          ),
+    // final filter_bar = SingleChildScrollView(
+    //   physics: const BouncingScrollPhysics(),
+    //   scrollDirection: Axis.horizontal,
+    //   child: GroupButton(
+    //     controller: controller,
+    //     options: GroupButtonOptions(
+    //       selectedTextStyle: AppText.contentBold(color: Colors.white),
+    //       unselectedTextStyle: const TextStyle(
+    //         color: Colors.white,
+    //         fontFamily: 'Loventine-Regular',
+    //         fontSize: 15,
+    //       ),
 
-          selectedColor: AppColor.mainColor,
-          unselectedColor: AppColor.mainColor.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(97),
-          // unselectedBorderColor: const Color(0xFF95969D),
+    //       selectedColor: AppColor.mainColor,
+    //       unselectedColor: AppColor.mainColor.withOpacity(0.2),
+    //       borderRadius: BorderRadius.circular(97),
+    //       // unselectedBorderColor: const Color(0xFF95969D),
 
-          selectedBorderColor: AppColor.mainColor,
-          selectedShadow: const [
-            BoxShadow(
-              color: ColorInPage.backgroudColor,
-              blurRadius: 25.0,
-              spreadRadius: 1.0,
-              offset: Offset(
-                0.0,
-                2.0,
-              ),
-            ),
-          ],
-          unselectedShadow: const [
-            BoxShadow(
-              color: ColorInPage.backgroudColor,
-              blurRadius: 25.0,
-              spreadRadius: 1.0,
-              offset: Offset(
-                0.0,
-                2.0,
-              ),
-            ),
-          ],
-          //direction: Axis.vertical,
-          groupingType: GroupingType.row,
-        ),
-        isRadio: true,
-        onSelected: (index, isSelected, value) {
-          print(index);
-          itemSelectedString = index.toString();
-          // resetApplySelected();
-          setState(() {});
-        },
-        buttons: choices,
-      ),
-    );
+    //       selectedBorderColor: AppColor.mainColor,
+    //       selectedShadow: const [
+    //         BoxShadow(
+    //           color: ColorInPage.backgroudColor,
+    //           blurRadius: 25.0,
+    //           spreadRadius: 1.0,
+    //           offset: Offset(
+    //             0.0,
+    //             2.0,
+    //           ),
+    //         ),
+    //       ],
+    //       unselectedShadow: const [
+    //         BoxShadow(
+    //           color: ColorInPage.backgroudColor,
+    //           blurRadius: 25.0,
+    //           spreadRadius: 1.0,
+    //           offset: Offset(
+    //             0.0,
+    //             2.0,
+    //           ),
+    //         ),
+    //       ],
+    //       //direction: Axis.vertical,
+    //       groupingType: GroupingType.row,
+    //     ),
+    //     isRadio: true,
+    //     onSelected: (index, isSelected, value) {
+    //       print(index);
+    //       itemSelectedString = index.toString();
+    //       // resetApplySelected();
+    //       setState(() {});
+    //     },
+    //     buttons: choices,
+    //   ),
+    // );
 
     return Scaffold(
       body: CustomScrollView(
@@ -195,9 +195,6 @@ class _MessagePageState extends State<MessagePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  search_bar,
-                  const SizedBox(height: 15),
-                  filter_bar,
                   const SizedBox(height: 15),
                   if (isLoading) ShimmerSimple(),
                   // if (!isLoading) ...chatrooms_list,

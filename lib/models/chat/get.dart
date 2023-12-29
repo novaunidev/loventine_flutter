@@ -76,12 +76,12 @@ class User {
       required this.isAllowNotifiCation});
 
   User.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'] ?? '';
-    name = json['name'] ?? 'Minh Quang';
-    online = json['online'] ?? true;
-    avatarUrl = json['avatarUrl'] ?? defaultAvatar;
-    numUnwatched = json['num_unwatched'] ?? 0;
-    isAllowNotifiCation = json['isAllowNotifiCation'] ?? false;
+    sId = json['_id'];
+    name = json['name'];
+    online = json['online'];
+    avatarUrl = json['avatarUrl'];
+    numUnwatched = json['num_unwatched'];
+    isAllowNotifiCation = json['isAllowNotifiCation'];
   }
 
   Map<String, dynamic> toJson() {

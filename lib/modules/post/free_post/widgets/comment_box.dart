@@ -29,6 +29,8 @@ import 'package:loventine_flutter/widgets/inkwell/inkwell_profile.dart';
 import 'package:loventine_flutter/widgets/shimmer_loading/shimmer.dart';
 import 'package:loventine_flutter/widgets/user_information/avatar_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 import '../../../../models/comment.dart';
 import '../../../../providers/page/message_page/card_profile_provider.dart';
@@ -69,6 +71,26 @@ class _CommentBoxState extends State<CommentBox> {
   bool isLoadingBtn = false;
   bool _isTyping = false;
   FocusNode _commentFocusNode = FocusNode();
+  Future<bool> isHateSpeech(String text) async {
+    final response = await http.post(
+      Uri.parse(hateSpeechUrl),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'text': _commentController.text,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final responseData = jsonDecode(response.body);
+      return responseData['is_hate_speech'];
+    } else {
+      // Handle error or return a default value
+      print('Request failed with status: ${response.statusCode}.');
+      return false;
+    }
+  }
 
   Future<void> getAllCommentsOfAPost(String postId) async {
     try {
@@ -431,171 +453,182 @@ class _CommentBoxState extends State<CommentBox> {
                                     ? const SizedBox()
                                     : InkWell(
                                         onTap: () async {
-                                          if (checkText(
-                                              _commentController.text)) {
-                                            CustomSnackbar.show(context,
-                                                type: SnackbarType.failure,
-                                                title: "Lỗi",
-                                                message:
-                                                    "Văn bản chứa từ không phù hợp");
-                                          } else {
-                                            if (isLoadingBtn == false) {
-                                              setState(() {
-                                                isLoadingBtn = true;
-                                              });
-                                              final result =
-                                                  await Connectivity()
-                                                      .checkConnectivity();
-                                              if (result !=
-                                                  ConnectivityResult.none) {
-                                                repName == ""
-                                                    ? CommentProvider()
-                                                        .addComment(
-                                                            widget.postId,
-                                                            widget.userId,
-                                                            "658bc259dc7db7f924462d4a",
-                                                            DateTime.now()
-                                                                .toString(),
-                                                            "post",
-                                                            _commentController
-                                                                .text,
-                                                            widget.userPostId)
-                                                        .whenComplete(() {
-                                                        _commentController
-                                                            .clear();
-                                                        initializeComments();
-                                                        scrollController
-                                                            .animateTo(
+                                          if (!await isHateSpeech(
+                                              'yourTextHere')) {
+                                            if (checkText(
+                                                _commentController.text)) {
+                                              CustomSnackbar.show(context,
+                                                  type: SnackbarType.failure,
+                                                  title: "Lỗi",
+                                                  message:
+                                                      "Văn bản chứa từ không phù hợp");
+                                            } else {
+                                              if (isLoadingBtn == false) {
+                                                setState(() {
+                                                  isLoadingBtn = true;
+                                                });
+                                                final result =
+                                                    await Connectivity()
+                                                        .checkConnectivity();
+                                                if (result !=
+                                                    ConnectivityResult.none) {
+                                                  repName == ""
+                                                      ? CommentProvider()
+                                                          .addComment(
+                                                              widget.postId,
+                                                              widget.userId,
+                                                              "658bc259dc7db7f924462d4a",
+                                                              DateTime.now()
+                                                                  .toString(),
+                                                              "post",
+                                                              _commentController
+                                                                  .text,
+                                                              widget.userPostId)
+                                                          .whenComplete(() {
+                                                          _commentController
+                                                              .clear();
+                                                          initializeComments();
                                                           scrollController
-                                                              .position
-                                                              .maxScrollExtent,
-                                                          duration:
-                                                              const Duration(
-                                                                  milliseconds:
-                                                                      500),
-                                                          curve:
-                                                              Curves.easeInOut,
-                                                        );
-                                                        setState(() {
-                                                          isLoadingBtn = false;
-                                                          _isTyping = false;
+                                                              .animateTo(
+                                                            scrollController
+                                                                .position
+                                                                .maxScrollExtent,
+                                                            duration:
+                                                                const Duration(
+                                                                    milliseconds:
+                                                                        500),
+                                                            curve: Curves
+                                                                .easeInOut,
+                                                          );
+                                                          setState(() {
+                                                            isLoadingBtn =
+                                                                false;
+                                                            _isTyping = false;
+                                                          });
+                                                        })
+                                                      : CommentProvider()
+                                                          .addComment(
+                                                              widget.postId,
+                                                              widget.userId,
+                                                              currentParentCommentId,
+                                                              DateTime.now()
+                                                                  .toString(),
+                                                              "comment",
+                                                              _commentController
+                                                                  .text,
+                                                              widget.userPostId)
+                                                          .whenComplete(() {
+                                                          _commentController
+                                                              .clear();
+                                                          initializeComments();
+                                                          setState(() {
+                                                            isLoadingBtn =
+                                                                false;
+                                                            _isTyping = false;
+                                                          });
                                                         });
-                                                      })
-                                                    : CommentProvider()
-                                                        .addComment(
-                                                            widget.postId,
-                                                            widget.userId,
-                                                            currentParentCommentId,
-                                                            DateTime.now()
-                                                                .toString(),
-                                                            "comment",
-                                                            _commentController
-                                                                .text,
-                                                            widget.userPostId)
-                                                        .whenComplete(() {
-                                                        _commentController
-                                                            .clear();
-                                                        initializeComments();
-                                                        setState(() {
-                                                          isLoadingBtn = false;
-                                                          _isTyping = false;
-                                                        });
-                                                      });
-                                              } else {
-                                                if (repName == "") {
-                                                  setState(() {
-                                                    commentPost.add(Comment(
-                                                        id: "null",
-                                                        content:
-                                                            _commentController
-                                                                .text,
-                                                        postId: widget.postId,
-                                                        userCommentId:
-                                                            widget.userId,
-                                                        nameUserCommentId:
-                                                            userCurrent.name,
-                                                        avatarUserCommentId:
-                                                            widget.avatar,
-                                                        time: DateTime.now()
-                                                            .toString(),
-                                                        replyType: "post",
-                                                        parentCommentId:
-                                                            "658bc259dc7db7f924462d4a",
-                                                        userPostId:
-                                                            widget.userPostId,
-                                                        childrenComments: []));
-                                                    addChildren();
-                                                    commentOffline.add(Comment(
-                                                        id: "null",
-                                                        content:
-                                                            _commentController
-                                                                .text,
-                                                        postId: widget.postId,
-                                                        userCommentId:
-                                                            widget.userId,
-                                                        nameUserCommentId:
-                                                            userCurrent.name,
-                                                        avatarUserCommentId:
-                                                            widget.avatar,
-                                                        time: DateTime.now()
-                                                            .toString(),
-                                                        replyType: "post",
-                                                        parentCommentId:
-                                                            "658bc259dc7db7f924462d4a",
-                                                        userPostId:
-                                                            widget.userPostId,
-                                                        childrenComments: []));
-                                                    isLoadingBtn = false;
-                                                    _isTyping = false;
-                                                  });
                                                 } else {
-                                                  setState(() {
-                                                    commentComment.add(Comment(
-                                                        id: "null",
-                                                        content:
-                                                            _commentController
-                                                                .text,
-                                                        postId: widget.postId,
-                                                        userCommentId:
-                                                            widget.userId,
-                                                        nameUserCommentId:
-                                                            userCurrent.name,
-                                                        avatarUserCommentId:
-                                                            widget.avatar,
-                                                        time: DateTime.now()
-                                                            .toString(),
-                                                        replyType: "comment",
-                                                        parentCommentId:
-                                                            currentParentCommentId,
-                                                        userPostId: "null",
-                                                        childrenComments: []));
-                                                    addChildren();
-                                                    commentOffline.add(Comment(
-                                                        id: "null",
-                                                        content:
-                                                            _commentController
-                                                                .text,
-                                                        postId: widget.postId,
-                                                        userCommentId:
-                                                            widget.userId,
-                                                        nameUserCommentId:
-                                                            userCurrent.name,
-                                                        avatarUserCommentId:
-                                                            widget.avatar,
-                                                        time: DateTime.now()
-                                                            .toString(),
-                                                        replyType: "comment",
-                                                        parentCommentId:
-                                                            currentParentCommentId,
-                                                        userPostId: "null",
-                                                        childrenComments: []));
-                                                    isLoadingBtn = false;
-                                                    _isTyping = false;
-                                                  });
+                                                  if (repName == "") {
+                                                    setState(() {
+                                                      commentPost.add(Comment(
+                                                          id: "null",
+                                                          content:
+                                                              _commentController
+                                                                  .text,
+                                                          postId: widget.postId,
+                                                          userCommentId:
+                                                              widget.userId,
+                                                          nameUserCommentId:
+                                                              userCurrent.name,
+                                                          avatarUserCommentId:
+                                                              widget.avatar,
+                                                          time: DateTime.now()
+                                                              .toString(),
+                                                          replyType: "post",
+                                                          parentCommentId:
+                                                              "658bc259dc7db7f924462d4a",
+                                                          userPostId:
+                                                              widget.userPostId,
+                                                          childrenComments: []));
+                                                      addChildren();
+                                                      commentOffline.add(Comment(
+                                                          id: "null",
+                                                          content:
+                                                              _commentController
+                                                                  .text,
+                                                          postId: widget.postId,
+                                                          userCommentId:
+                                                              widget.userId,
+                                                          nameUserCommentId:
+                                                              userCurrent.name,
+                                                          avatarUserCommentId:
+                                                              widget.avatar,
+                                                          time: DateTime.now()
+                                                              .toString(),
+                                                          replyType: "post",
+                                                          parentCommentId:
+                                                              "658bc259dc7db7f924462d4a",
+                                                          userPostId:
+                                                              widget.userPostId,
+                                                          childrenComments: []));
+                                                      isLoadingBtn = false;
+                                                      _isTyping = false;
+                                                    });
+                                                  } else {
+                                                    setState(() {
+                                                      commentComment.add(Comment(
+                                                          id: "null",
+                                                          content:
+                                                              _commentController
+                                                                  .text,
+                                                          postId: widget.postId,
+                                                          userCommentId:
+                                                              widget.userId,
+                                                          nameUserCommentId:
+                                                              userCurrent.name,
+                                                          avatarUserCommentId:
+                                                              widget.avatar,
+                                                          time: DateTime.now()
+                                                              .toString(),
+                                                          replyType: "comment",
+                                                          parentCommentId:
+                                                              currentParentCommentId,
+                                                          userPostId: "null",
+                                                          childrenComments: []));
+                                                      addChildren();
+                                                      commentOffline.add(Comment(
+                                                          id: "null",
+                                                          content:
+                                                              _commentController
+                                                                  .text,
+                                                          postId: widget.postId,
+                                                          userCommentId:
+                                                              widget.userId,
+                                                          nameUserCommentId:
+                                                              userCurrent.name,
+                                                          avatarUserCommentId:
+                                                              widget.avatar,
+                                                          time: DateTime.now()
+                                                              .toString(),
+                                                          replyType: "comment",
+                                                          parentCommentId:
+                                                              currentParentCommentId,
+                                                          userPostId: "null",
+                                                          childrenComments: []));
+                                                      isLoadingBtn = false;
+                                                      _isTyping = false;
+                                                    });
+                                                  }
+                                                  _commentController.clear();
                                                 }
-                                                _commentController.clear();
                                               }
                                             }
+                                          } else {
+                                            CustomSnackbar.show(context,
+                                                title: "Không được phép đăng!",
+                                                message:
+                                                    "Do từ ngữ không phù hợp",
+                                                type: SnackbarType.failure);
                                           }
                                         },
                                         child: isLoadingBtn
@@ -1105,7 +1138,7 @@ class _CommentLv2WidgetState extends State<CommentLv2Widget> {
                                   alignment: Alignment.centerLeft,
                                   onPressed: () {
                                     // kiet here
-                                    print('kiet here 1');
+
                                     // CustomSnackbar.show(
                                     //   context,
                                     //   title: 'kiet here 1',
@@ -1504,15 +1537,15 @@ class _CommentLv2WidgetState extends State<CommentLv2Widget> {
 Future<void> goToMatchingChatRoom(String userId, context) async {
   print("😌🎉🎉🎉🎉🎉🎉🎉🎉🎉");
   print(userId);
-  print(SocketProvider.current_user_id);
+  print("658dc3552108076094ac6824");
   try {
-    await ChatRoomService.create(
-        SocketProvider.current_user_id, userId, CHAT_ROOM_TYPE.MATCHING);
+    await ChatRoomService.create("658dc3552108076094ac6824",
+        "658dc3922108076094ac6864", CHAT_ROOM_TYPE.MATCHING);
     final result = await ChatRoomService.getOneWith(
-        SocketProvider.current_user_id,
-        userId,
+        "658dc3552108076094ac6824",
+        "658dc3922108076094ac6864",
         CHAT_ROOM_TYPE.MATCHING,
-        SocketProvider.current_user_id);
+        "658dc3552108076094ac6824");
 
     if (result.runtimeType.toString() != 'String') {
       Navigator.of(context).push(
