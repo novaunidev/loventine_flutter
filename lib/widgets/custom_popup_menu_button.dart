@@ -63,44 +63,43 @@ class CustomPopupMenuButton extends StatelessWidget {
     final bookMarkProvider =
         Provider.of<BookmarkProvider>(context, listen: false);
     editObject(bool _isPublic) async {
-      try {
-        await Dio().put("$urlPosts/$postId", data: {
-          "_id": post.id,
-          "author": post.userId,
-          "title": post.title,
-          "content": post.content,
-          "postingTime": post.postingTime,
-          "likeAllUserId": post.likeAllUserId,
-          "likeCounts": post.likeCounts,
-          "comments": post.comments,
-          "images": post.images,
-          "postType": post.postType,
-          "price": null,
-          "adviseType": null,
-          "emoji": null,
-          "view": 0,
-          "applyCount": 0,
-          "isLike": post.isLike,
-          "isDelete": post.isDelete,
-          'deleteTime': post.deleteTime,
-          "userAddress": post.userAddress,
-          "isPublic": _isPublic,
-          "isBookmark": false,
-          "countPaymentVerified": 0,
-          "numConsultingJobStart": 0,
-          "countPayment": 0,
-        });
+      print(_isPublic);
+      
+        // await Dio().put("$urlPosts/$postId", data: {
+        //   "_id": post.id,
+        //   "author": post.userId,
+        //   "title": post.title,
+        //   "content": post.content,
+        //   "postingTime": post.postingTime,
+        //   "likeAllUserId": post.likeAllUserId,
+        //   "likeCounts": post.likeCounts,
+        //   "comments": post.comments,
+        //   "images": post.images,
+        //   "postType": post.postType,
+        //   "price": null,
+        //   "adviseType": null,
+        //   "emoji": null,
+        //   "view": 0,
+        //   "applyCount": 0,
+        //   "isLike": post.isLike,
+        //   "isDelete": post.isDelete,
+        //   'deleteTime': post.deleteTime,
+        //   "userAddress": post.userAddress,
+        //   "isPublic": _isPublic,
+        //   "isBookmark": false,
+        //   "countPaymentVerified": 0,
+        //   "numConsultingJobStart": 0,
+        //   "countPayment": 0,
+        // });
 
         CustomSnackbar.show(context,
             title: "Chỉnh sửa đối tượng thành công",
             type: SnackbarType.success);
         postFreeProvider.updateObjectInFreePost(postId, _isPublic);
-        postFreeProvider.updateObjectInFreePost1(postId, _isPublic);
+        // postFreeProvider.updateObjectInFreePost1(postId, _isPublic);
         postFreeUserProvider.updateObjectInFreePostofUser(postId, _isPublic);
         bookMarkProvider.updateObjectInBookmarkPost(postId, _isPublic);
-      } catch (e) {
-        print(e);
-      }
+      
     }
 
     return PopupMenuButton<int>(

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:loventine_flutter/config.dart';
+import 'package:loventine_flutter/models/comment.dart';
 
 class CommentProvider {
   // List<Comment> _commentAll = [];
@@ -60,10 +61,23 @@ class CommentProvider {
     }
   }
 
-  Future<void> deleteComment(String commentId) async {
-    var result = await _dio.delete("$baseUrl/comment/deleteComment/$commentId");
-    if (result.statusCode == 200) {
-      print("deleteComment success");
+  Future<void> deleteComment(String commentId, Comment comment) async {
+    print("alollllllllllllllllll");
+    try {
+      await _dio.put("$urlComments/$commentId", data: {
+        "_id": comment.id,
+        "content": "Bình luận đã xóa",
+        "postId": comment.postId,
+        "userCommentId": comment.userCommentId,
+        "time": comment.time,
+        "userPostId": comment.userPostId,
+        "parentCommentId": comment.parentCommentId,
+        "childrenComments": comment.childrenComments,
+        "replyType": comment.replyType
+      });
+    } catch (error) {
+      // Xử lý lỗi tại đây
+      print(error.toString());
     }
   }
 }
