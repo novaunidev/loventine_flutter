@@ -18,11 +18,12 @@ class PostFreeProvider with ChangeNotifier {
   Future<void> getAllFreePost(int page, bool reload, String userId) async {
     print("Đang get all free post");
 
-    if (userId == "") {
+    if (userId == "" || userId == "null") {
       userId = '658b268ea62a946c86acdd22';
     }
 
     try {
+      print("$urlPosts/user/$userId");
       var result = await _dio.get("$urlPosts/user/$userId",
           queryParameters: {'page': page, 'limit': 5});
       print(result.statusCode);
@@ -45,7 +46,7 @@ class PostFreeProvider with ChangeNotifier {
               data[i] as Map<String, dynamic>, response.data));
         
       }
-      print(_postFree[0].name);
+      _postFree = _postFree.reversed.toList();
     } catch (e) {
       _postFree = [];
     }

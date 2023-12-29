@@ -224,9 +224,9 @@ class _SignUpState extends State<SignUp> {
               const SizedBox(
                 height: 10,
               ),
-              SvgPicture.asset(
-                'assets/svgs/logo.svg',
-                height: 100,
+              Image.asset(
+                "assets/images/loventine.png",
+                height: 50,
               ),
               const Padding(
                 padding: EdgeInsets.only(top: 5.0),

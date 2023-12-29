@@ -865,7 +865,7 @@ class _CommentItemState extends State<CommentItem> {
                                         .checkConnectivity();
                                     if (result != ConnectivityResult.none) {
                                       CommentProvider()
-                                          .deleteComment(widget.commentPost.id)
+                                          .deleteComment(widget.commentPost.id, widget.commentPost)
                                           .whenComplete(() {
                                         widget.onInitializeComments();
                                         Navigator.pop(context);
@@ -1177,7 +1177,7 @@ class _CommentLv2WidgetState extends State<CommentLv2Widget> {
                                         .checkConnectivity();
                                     if (result != ConnectivityResult.none) {
                                       CommentProvider()
-                                          .deleteComment(widget.item.id)
+                                          .deleteComment(widget.item.id, widget.item)
                                           .whenComplete(() {
                                         widget.onInitializeComments();
                                         Navigator.pop(context);
@@ -1465,7 +1465,7 @@ class _CommentLv2WidgetState extends State<CommentLv2Widget> {
                                               if (result !=
                                                   ConnectivityResult.none) {
                                                 CommentProvider()
-                                                    .deleteComment(item.id)
+                                                    .deleteComment(item.id, item)
                                                     .whenComplete(() {
                                                   widget.onInitializeComments();
                                                   Navigator.pop(context);

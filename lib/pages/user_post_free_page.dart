@@ -42,10 +42,10 @@ class _UserPostFreeState extends State<UserPostFree> {
       current_user_id = Provider.of<MessagePageProvider>(context, listen: false)
           .current_user_id;
       avatarUrl = Provider.of<UserImageProvider>(context, listen: false).avatar;
-      await Provider.of<PostFreeOfUserProvider>(context, listen: false)
-          .getAllFreePostsOfUser(current_user_id);
-      postFreeUser = Provider.of<PostFreeOfUserProvider>(context, listen: false)
-          .postFreeUser;
+      // await Provider.of<PostFreeOfUserProvider>(context, listen: false)
+      //     .getAllFreePostsOfUser(current_user_id);
+      // postFreeUser = Provider.of<PostFreeOfUserProvider>(context, listen: false)
+      //     .postFreeUser;
       setState(() {
         isLoading = false;
       });
@@ -107,23 +107,17 @@ class _UserPostFreeState extends State<UserPostFree> {
           ],
           body: isLoading
               ? ShimmerFreeLoading(width, height)
-              : postFreeUser.isEmpty
-                  ? const Center(
-                      child: Text(
-                        "Bạn không có bài đăng nào trên cộng đồng",
-                        style: TextStyle(
-                          fontFamily: "Loventine-Regular",
-                        ),
-                      ),
-                    )
-                  : SingleChildScrollView(
-                      child: Consumer<PostFreeOfUserProvider>(
+              :  SingleChildScrollView(
+                      child: Consumer<PostFreeProvider>(
                       builder: (context, postAllData, _) => ListView.builder(
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount: postAllData.postFreeUser.length,
+                          itemCount: postAllData.postFree.length,
                           itemBuilder: (context, index) {
-                            return GestureDetector(
+                            final post = postAllData.postFree[index];
+                            return post.userId != current_user_id
+                            ?SizedBox()
+                            :GestureDetector(
                                 onDoubleTapDown: (details) {
                                   setState(() {
                                     _tapPosition = details.localPosition;
@@ -131,7 +125,7 @@ class _UserPostFreeState extends State<UserPostFree> {
                                     indexDoubleTap = index;
                                   });
                                   onLikeDoubleTapped(
-                                      postAllData.postFreeUser[index]);
+                                      postAllData.postFree[index]);
                                 },
                                 onTap: () {
                                   Navigator.push(
@@ -139,7 +133,7 @@ class _UserPostFreeState extends State<UserPostFree> {
                                     MaterialPageRoute(
                                         builder: (context) => PostDetailScreen(
                                               post: postAllData
-                                                  .postFreeUser[index],
+                                                  .postFree[index],
                                               userId: current_user_id,
                                               avatar: avatarUrl,
                                               page: 2,
@@ -156,7 +150,7 @@ class _UserPostFreeState extends State<UserPostFree> {
                                       color: Colors.white,
                                       child: FreePostItem(
                                         avatar: avatarUrl,
-                                        post: postAllData.postFreeUser[index],
+                                        post: postAllData.postFree[index],
                                         userId: current_user_id,
                                         userName: "",
                                         index: index,

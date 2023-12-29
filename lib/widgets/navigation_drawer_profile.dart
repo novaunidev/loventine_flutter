@@ -233,9 +233,9 @@ class NavigationDrawerProfile extends StatelessWidget {
             if (data[index]['title'] == "Đăng xuất") {
               CustomSnackbar.show(context,
                   title: '  Đang đăng xuất...', indicator: true);
-              var uri = Uri.parse('$urlAuthLogout/$userId');
-              Response res = await patch(uri);
-              appSocket.close();
+              // var uri = Uri.parse('$urlAuthLogout/$userId');
+              // Response res = await patch(uri);
+              // appSocket.close();
               await Hive.box<CountApp>('countBox').clear();
               await Hive.box<UserId>('userBox').clear();
               await Provider.of<MessagePageProvider>(context, listen: false)
@@ -248,8 +248,8 @@ class NavigationDrawerProfile extends StatelessWidget {
               await _secureStorage.deleteAll();
               await prefs.remove('userId');
               await prefs.remove('deviceId');
-              await Provider.of<UserImageProvider>(context, listen: false)
-                  .getAllUserImage(userId);
+              // await Provider.of<UserImageProvider>(context, listen: false)
+              //     .getAllUserImage(userId);
               List<String> fcmTokens =
                   await Provider.of<UserImageProvider>(context, listen: false)
                       .fcmTokens;
